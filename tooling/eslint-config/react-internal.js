@@ -1,6 +1,7 @@
-const { resolve } = require("node:path");
+const { resolve } = require('node:path');
+const { rules } = require('./shared/rules');
 
-const project = resolve(process.cwd(), "tsconfig.json");
+const project = resolve(process.cwd(), 'tsconfig.json');
 
 /*
  * This is a custom ESLint configuration for use with
@@ -12,32 +13,26 @@ const project = resolve(process.cwd(), "tsconfig.json");
  *
  */
 
-/** @type {import("eslint").Linter.Config} */
 module.exports = {
-  extends: ["eslint:recommended", "prettier", "eslint-config-turbo"],
-  plugins: ["only-warn"],
+  extends: [
+    'turbo',
+    ...[
+      '@vercel/style-guide/eslint/browser',
+      '@vercel/style-guide/eslint/node',
+      '@vercel/style-guide/eslint/typescript',
+      '@vercel/style-guide/eslint/react',
+    ].map((config) => require.resolve(config)),
+  ],
   globals: {
-    React: true,
     JSX: true,
   },
-  env: {
-    browser: true,
-  },
+  ignorePatterns: ['node_modules/', 'dist/', '.eslintrc.js'],
   settings: {
-    "import/resolver": {
+    'import/resolver': {
       typescript: {
         project,
       },
     },
   },
-  ignorePatterns: [
-    // Ignore dotfiles
-    ".*.js",
-    "node_modules/",
-    "dist/",
-  ],
-  overrides: [
-    // Force ESLint to detect .tsx files
-    { files: ["*.js?(x)", "*.ts?(x)"] },
-  ],
+  rules,
 };

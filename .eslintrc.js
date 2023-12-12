@@ -1,10 +1,10 @@
-// This configuration only applies to the package manager root.
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
-  ignorePatterns: ['apps/**', 'packages/**'],
-  extends: ['@repo/eslint-config/library.js'],
-  parser: '@typescript-eslint/parser',
+  root: true,
+  extends: [require.resolve('./tooling/eslint-config/node.js')],
+  ignorePatterns: ['apps/**', 'packages/**', 'tooling/**'],
   parserOptions: {
     project: true,
   },
+  plugins: ['@typescript-eslint'],
 }

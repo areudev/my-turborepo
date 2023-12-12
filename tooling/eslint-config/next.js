@@ -1,35 +1,41 @@
-const {resolve} = require('node:path')
-
-const project = resolve(process.cwd(), 'tsconfig.json')
+const { rules } = require('./shared/rules.js');
+const { overrides } = require('./shared/overrides.js');
 
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   extends: [
-    'eslint:recommended',
-    'prettier',
-    require.resolve('@vercel/style-guide/eslint/next'),
-    'eslint-config-turbo',
+    'turbo',
+    ...[
+      '@vercel/style-guide/eslint/browser',
+      '@vercel/style-guide/eslint/node',
+      '@vercel/style-guide/eslint/react',
+      '@vercel/style-guide/eslint/next',
+      '@vercel/style-guide/eslint/typescript',
+    ].map((config) => require.resolve(config)),
   ],
-  globals: {
-    React: true,
-    JSX: true,
-  },
-  env: {
-    node: true,
-    browser: true,
-  },
-  plugins: ['only-warn'],
-  settings: {
-    'import/resolver': {
-      typescript: {
-        project,
+  ignorePatterns: ['**/.next/**', '**/.eslintrc.js'],
+  overrides: [
+    ...overrides,
+    {
+      files: ['**/route.tsx'],
+      rules: {
+        '@next/next/no-img-element': 'off',
+        'jsx-a11y/alt-text': 'off',
       },
     },
-  },
-  ignorePatterns: [
-    // Ignore dotfiles
-    '.*.js',
-    'node_modules/',
+    {
+      files: [
+        'pages/**',
+        'src/pages/**',
+        'next.config.js',
+        'app/**/{head,layout,loading,page,error,not-found}.tsx',
+        'contentlayer.config.ts',
+      ],
+      rules: {
+        'import/no-default-export': 'off',
+      },
+    },
   ],
-  overrides: [{files: ['*.js?(x)', '*.ts?(x)']}],
-}
+  root: true,
+  rules,
+};

@@ -1,6 +1,7 @@
 {
-  "extends": "@repo/typescript-config/react-library.json",
+  "extends": "@repo/tsconfig/react-library.json",
   "compilerOptions": {
+    "incremental": false,
     "outDir": "dist"
   },
   "include": ["src"],
