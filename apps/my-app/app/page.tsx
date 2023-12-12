@@ -1,6 +1,8 @@
 import Image from 'next/image'
+import {Button} from '@repo/ui/button'
 
 export default function Home() {
+  console.log('Hello from Next.js!')
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
@@ -24,6 +26,7 @@ export default function Home() {
               priority
             />
           </a>
+          <Button appName="Yolo">hello</Button>
         </div>
       </div>
 
@@ -66,7 +69,7 @@ export default function Home() {
               -&gt;
             </span>
           </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+          <p className="m-0 max-w-[30ch] text-sm opacity-50">
             Learn about Next.js in an interactive course with&nbsp;quizzes!
           </p>
         </a>

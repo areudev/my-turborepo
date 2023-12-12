@@ -4,9 +4,10 @@ module.exports = {
   extends: [require.resolve('@repo/lint/next.js')],
   overrides: [
     {
-      files: ['**/**.tsx'],
+      files: ['*'],
       rules: {
-        'react/jsx-sort-props': 'off',
+        // 'react/jsx-sort-props': 'off',
+        // 'no-console': 'warn',
       },
     },
   ],
