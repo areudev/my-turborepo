@@ -9,7 +9,9 @@
 	],
 	"scripts": {
 		"lint": "eslint . --cache --cache-location 'node_modules/.cache/.eslintcache' --max-warnings 0",
-		"lint:fix": "eslint . --fix --cache --cache-location 'node_modules/.cache/.eslintcache' --max-warnings 0"
+		"lint:fix": "eslint . --fix --cache --cache-location 'node_modules/.cache/.eslintcache' --max-warnings 0",
+		"format": "prettier . --check --cache --cache-location='node_modules/.cache/.prettiercache'",
+		"format:fix": "prettier . --write --cache --cache-location='node_modules/.cache/.prettiercache' --log-level=warn"
 	},
 	"dependencies": {
 		"@next/eslint-plugin-next": "^13.5.1",
