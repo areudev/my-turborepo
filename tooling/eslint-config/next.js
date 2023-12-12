@@ -1,5 +1,5 @@
-const { rules } = require('./shared/rules.js');
-const { overrides } = require('./shared/overrides.js');
+const {rules} = require('./shared/rules.js')
+const {overrides} = require('./shared/overrides.js')
 
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
@@ -16,6 +16,13 @@ module.exports = {
   ignorePatterns: ['**/.next/**', '**/.eslintrc.js'],
   overrides: [
     ...overrides,
+    {
+      files: ['**/*.ts', '**/*.tsx'],
+      rules: {
+        'no-console': 'warn',
+        'react/jsx-sort-props': 'off',
+      },
+    },
     {
       files: ['**/route.tsx'],
       rules: {
@@ -38,4 +45,4 @@ module.exports = {
   ],
   root: true,
   rules,
-};
+}
