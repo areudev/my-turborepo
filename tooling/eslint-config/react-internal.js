@@ -1,7 +1,7 @@
-const { resolve } = require('node:path');
-const { rules } = require('./shared/rules');
+const { resolve } = require('node:path')
+const { rules } = require('./shared/rules')
 
-const project = resolve(process.cwd(), 'tsconfig.json');
+const project = resolve(process.cwd(), 'tsconfig.json')
 
 /*
  * This is a custom ESLint configuration for use with
@@ -14,25 +14,25 @@ const project = resolve(process.cwd(), 'tsconfig.json');
  */
 
 module.exports = {
-  extends: [
-    'turbo',
-    ...[
-      '@vercel/style-guide/eslint/browser',
-      '@vercel/style-guide/eslint/node',
-      '@vercel/style-guide/eslint/typescript',
-      '@vercel/style-guide/eslint/react',
-    ].map((config) => require.resolve(config)),
-  ],
-  globals: {
-    JSX: true,
-  },
-  ignorePatterns: ['node_modules/', 'dist/', '.eslintrc.js'],
-  settings: {
-    'import/resolver': {
-      typescript: {
-        project,
-      },
-    },
-  },
-  rules,
-};
+	extends: [
+		'turbo',
+		...[
+			'@vercel/style-guide/eslint/browser',
+			'@vercel/style-guide/eslint/node',
+			'@vercel/style-guide/eslint/typescript',
+			'@vercel/style-guide/eslint/react',
+		].map(config => require.resolve(config)),
+	],
+	globals: {
+		JSX: true,
+	},
+	ignorePatterns: ['node_modules/', 'dist/', '.eslintrc.js'],
+	settings: {
+		'import/resolver': {
+			typescript: {
+				project,
+			},
+		},
+	},
+	rules,
+}

@@ -1,22 +1,22 @@
 {
-  "extends": "@repo/tsconfig/nextjs.json",
-  "compilerOptions": {
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
-    "plugins": [{"name": "next"}],
-    "baseUrl": ".",
-    "paths": {
-      "#/*": ["./*"]
-    }
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.js",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "next.config.js"
-  ],
-  "exclude": ["node_modules", ".next"]
+	"extends": "@repo/tsconfig/nextjs.json",
+	"compilerOptions": {
+		"tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+		"plugins": [{ "name": "next" }],
+		"baseUrl": ".",
+		"paths": {
+			"#/*": ["./*"]
+		}
+	},
+	"include": [
+		"next-env.d.ts",
+		"**/*.js",
+		"**/*.ts",
+		"**/*.tsx",
+		".next/types/**/*.ts",
+		"next.config.js"
+	],
+	"exclude": ["node_modules", ".next"]
 }
 
 // {
