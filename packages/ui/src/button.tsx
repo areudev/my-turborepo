@@ -9,8 +9,6 @@ interface ButtonProps {
 }
 
 export function Button({children, className, appName}: ButtonProps) {
-  console.log('hello')
-
   return (
     <button
       className={className}
