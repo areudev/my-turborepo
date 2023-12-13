@@ -1,5 +1,5 @@
-const { resolve } = require('node:path')
-const { rules } = require('./shared/rules')
+const {resolve} = require('node:path')
+const {rules} = require('./shared/rules')
 
 const project = resolve(process.cwd(), 'tsconfig.json')
 

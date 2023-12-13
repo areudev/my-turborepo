@@ -1,6 +1,6 @@
-const { resolve } = require('node:path')
-const { rules } = require('./shared/rules.js')
-const { overrides } = require('./shared/overrides.js')
+const {resolve} = require('node:path')
+const {rules} = require('./shared/rules.js')
+const {overrides} = require('./shared/overrides.js')
 
 const project = resolve(process.cwd(), 'tsconfig.json')
 

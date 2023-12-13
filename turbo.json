@@ -32,7 +32,8 @@
 		},
 		"format": {
 			"dependsOn": ["^topo"],
-			"outputs": ["node_modules/.cache/.prettiercache"]
+			"outputs": ["node_modules/.cache/.prettiercache"],
+			"cache": false
 		},
 		"format:fix": {
 			"dependsOn": ["^topo"],

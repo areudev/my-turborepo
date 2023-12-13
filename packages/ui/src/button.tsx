@@ -1,6 +1,6 @@
 'use client'
 
-import { type ReactNode } from 'react'
+import {type ReactNode} from 'react'
 
 interface ButtonProps {
 	children: ReactNode
@@ -8,7 +8,7 @@ interface ButtonProps {
 	appName: string
 }
 
-export function Button({ children, className, appName }: ButtonProps) {
+export function Button({children, className, appName}: ButtonProps) {
 	return (
 		<button
 			className={className}
