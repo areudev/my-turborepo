@@ -9,11 +9,11 @@ module.exports = {
 		'no-alert': 'off',
 		'tsdoc/syntax': 'off',
 		camelcase: 'off',
-		'turbo/no-undeclared-env-vars': [
-			'error',
-			{
-				allowList: ['NODE_ENV'],
-			},
-		],
+		// 'turbo/no-undeclared-env-vars': [
+		// 	'off',
+		// 	{
+		// 		allowList: ['NODE_ENV'],
+		// 	},
+		// ],
 	},
 }

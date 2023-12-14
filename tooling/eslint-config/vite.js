@@ -1,3 +1,5 @@
+const {rules} = require('./shared/rules')
+
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
 	root: true,
@@ -11,6 +13,7 @@ module.exports = {
 	parser: '@typescript-eslint/parser',
 	plugins: ['react-refresh'],
 	rules: {
+		...rules,
 		'react-refresh/only-export-components': [
 			'warn',
 			{allowConstantExport: true},
