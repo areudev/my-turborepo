@@ -7,7 +7,7 @@ module.exports = {
 		'@vercel/style-guide/eslint/typescript',
 		'@vercel/style-guide/eslint/react',
 	].map(require.resolve),
-	ignorePatterns: ['dist', '.eslintrc.cjs'],
+	ignorePatterns: ['dist', '.eslintrc.cjs', 'vite.config.ts'],
 	parser: '@typescript-eslint/parser',
 	plugins: ['react-refresh'],
 	rules: {
