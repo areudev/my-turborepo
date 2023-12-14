@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import {Button} from '@repo/ui/button'
-
+// const _yo = yo => yo
 export default function Home() {
 	// console.log('Hello from Next.js!')
 	return (

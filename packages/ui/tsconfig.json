@@ -1,5 +1,6 @@
 {
 	"extends": "@repo/tsconfig/react-library.json",
+
 	"compilerOptions": {
 		"incremental": false,
 		"outDir": "dist"

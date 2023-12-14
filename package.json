@@ -9,7 +9,8 @@
 		"lint:fix": "eslint . --fix --cache --cache-location 'node_modules/.cache/.eslintcache' --max-warnings 0",
 		"lint:all": "turbo  lint --continue",
 		"format": "turbo --no-daemon  format --continue",
-		"format:fix": "turbo format:fix --continue"
+		"format:fix": "turbo format:fix --continue",
+		"typecheck": "turbo typecheck --continue"
 	},
 	"devDependencies": {
 		"@vercel/style-guide": "^4.0.2",
