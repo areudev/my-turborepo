@@ -4,6 +4,13 @@ import viteLogo from '../public/vite.svg'
 import reactLogo from './assets/react.svg'
 import './App.css'
 
+export const loader = () => {
+	return {
+		message: 'Loading...',
+		delay: 1000,
+	}
+}
+
 export function App() {
 	const [count, setCount] = useState(0)
 	return (
