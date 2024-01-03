@@ -1,3 +1,5 @@
+import {Button} from './components/button'
+
 export function App() {
 	return (
 		<>
@@ -16,6 +18,7 @@ export function Lorem() {
 				praesentium at est incidunt, corrupti nisi molestiae modi nulla
 				sapiente.
 			</p>
+			<Button>Hello</Button>
 		</div>
 	)
 }
