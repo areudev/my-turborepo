@@ -1,4 +1,4 @@
-import {Button} from './components/button'
+import {Input, Button} from './components'
 
 export function App() {
 	return (
@@ -19,6 +19,7 @@ export function Lorem() {
 				sapiente.
 			</p>
 			<Button>Hello</Button>
+			<Input />
 		</div>
 	)
 }
