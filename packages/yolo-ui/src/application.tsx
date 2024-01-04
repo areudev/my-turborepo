@@ -1,12 +1,29 @@
-import {Input, Button} from './components'
-import {Label} from './components/label'
+import {Input, Button, PopoverDemo, ProgressDemo} from './components'
 
 export function App() {
 	return (
-		<>
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				gap: '1rem',
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}
+		>
 			<h1 className="hello">This is my Yolo UI Yall</h1>
 			<Lorem />
-		</>
+			<Button violet>Hello</Button>
+			<div
+				style={{
+					width: '500px',
+				}}
+			>
+				<Input />
+			</div>
+			<ProgressDemo />
+			<PopoverDemo />
+		</div>
 	)
 }
 
@@ -19,9 +36,6 @@ export function Lorem() {
 				praesentium at est incidunt, corrupti nisi molestiae modi nulla
 				sapiente.
 			</p>
-			<Button violet>Hello</Button>
-			<Input />
-			<Label>Hello</Label>
 		</div>
 	)
 }
