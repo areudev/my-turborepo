@@ -4,12 +4,23 @@ import './button.css'
 
 export type ButtonProps = ComponentProps<'button'> & {
 	dangerous?: boolean
+	violet?: boolean
 }
 
-export function Button({className, dangerous = false, ...props}: ButtonProps) {
+export function Button({
+	className,
+	violet,
+	dangerous = false,
+	...props
+}: ButtonProps) {
 	return (
 		<button
-			className={clsx('button', dangerous && 'dangerous', className)}
+			className={clsx(
+				'Button',
+				violet && 'violet',
+				dangerous && 'dangerous',
+				className,
+			)}
 			type="button"
 			{...props}
 		/>

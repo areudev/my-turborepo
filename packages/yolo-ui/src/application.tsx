@@ -1,4 +1,5 @@
 import {Input, Button} from './components'
+import {Label} from './components/label'
 
 export function App() {
 	return (
@@ -18,8 +19,9 @@ export function Lorem() {
 				praesentium at est incidunt, corrupti nisi molestiae modi nulla
 				sapiente.
 			</p>
-			<Button>Hello</Button>
+			<Button violet>Hello</Button>
 			<Input />
+			<Label>Hello</Label>
 		</div>
 	)
 }
