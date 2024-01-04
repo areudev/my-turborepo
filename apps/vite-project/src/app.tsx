@@ -1,4 +1,5 @@
 import {useState} from 'react'
+import {Button} from 'yolui'
 
 export function App() {
 	const [count, setCount] = useState(0)
@@ -6,12 +7,12 @@ export function App() {
 	return (
 		<div>
 			<h1>{count}</h1>
-			<button onClick={() => setCount(c => c + 1)} type="button">
+			<Button onClick={() => setCount(c => c + 1)} type="button" violet>
 				Add
-			</button>
-			<button onClick={() => setCount(c => c - 1)} type="button">
+			</Button>
+			<Button onClick={() => setCount(c => c - 1)} type="button" violet>
 				Minus
-			</button>
+			</Button>
 		</div>
 	)
 }
