@@ -1,9 +1,16 @@
-import {Input, Button, PopoverDemo, ProgressDemo} from './components'
+import {
+	Input,
+	Button,
+	PopoverDemo,
+	ProgressDemo,
+	NavigationMenuDemo,
+} from './components'
 
 export function App() {
 	return (
 		<div
 			style={{
+				paddingTop: '2rem',
 				display: 'flex',
 				flexDirection: 'column',
 				gap: '1rem',
@@ -11,7 +18,7 @@ export function App() {
 				alignItems: 'center',
 			}}
 		>
-			<h1 className="hello">This is my Yolo UI Yall</h1>
+			<NavigationMenuDemo />
 			<Lorem />
 			<Button violet>Hello</Button>
 			<div
