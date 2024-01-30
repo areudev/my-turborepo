@@ -2,7 +2,7 @@
 module.exports = {
 	arrowParens: 'avoid',
 	bracketSameLine: false,
-	bracketSpacing: false,
+	bracketSpacing: true,
 	embeddedLanguageFormatting: 'auto',
 	endOfLine: 'lf',
 	htmlWhitespaceSensitivity: 'css',
@@ -18,4 +18,20 @@ module.exports = {
 	tabWidth: 2,
 	trailingComma: 'all',
 	useTabs: true,
+	overrides: [
+		{
+			files: ['**/*.json'],
+			options: {
+				useTabs: false,
+			},
+		},
+		{
+			files: ['**/*.mdx'],
+			options: {
+				proseWrap: 'preserve',
+				htmlWhitespaceSensitivity: 'ignore',
+			},
+		},
+	],
+	plugins: ['prettier-plugin-tailwindcss'],
 }
