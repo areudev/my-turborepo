@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 :root {
-	@apply bg-white dark:bg-zinc-900 text-black dark:text-white;
+	@apply bg-white text-black dark:bg-gray-900 dark:text-white;
 }
