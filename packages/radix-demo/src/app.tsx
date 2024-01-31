@@ -1,4 +1,4 @@
-import { SwitchDemo } from './components/switch'
+import { SwitchDemo } from './components/switch-demo'
 
 export function App() {
 	return (
