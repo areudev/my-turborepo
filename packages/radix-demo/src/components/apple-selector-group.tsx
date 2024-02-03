@@ -24,13 +24,13 @@ export const AppleSelectorGroupItem = React.forwardRef<
 	return (
 		<RadioGroupPrimitive.Item
 			className={cn(
-				'flex w-full rounded-lg border border-gray-500 p-4 data-[state=checked]:border-blue-500 data-[state=checked]:ring-1 data-[state=checked]:ring-inset',
+				'flex w-full rounded-lg border border-gray-500 p-4 ring-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 data-[state=checked]:border-sky-500 data-[state=checked]:ring-1 data-[state=checked]:ring-inset',
 				className,
 			)}
 			ref={ref}
 			{...props}
 		>
-			<span className="font-semibold text-white">{children}</span>
+			{children}
 		</RadioGroupPrimitive.Item>
 	)
 })
