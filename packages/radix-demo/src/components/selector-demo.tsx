@@ -10,10 +10,6 @@ const options = [
 	{ value: '2tb', label: '2TB SSD Storage', price: 400 },
 	{ value: '4tb', label: '4TB SSD Storage', price: 1000 },
 	{ value: '8tb', label: '8TB SSD Storage', price: 2200 },
-	// { size: '1TB' },
-	// { size: '2TB' },
-	// { size: '4TB' },
-	// { size: '8TB' },
 ]
 
 export function SelectorDemo() {
@@ -35,7 +31,12 @@ export function SelectorDemo() {
 						</span>
 						{selectedSize !== option.value ? (
 							<span className="font-thin">
-								{option.price - (selectedOption?.price ?? 0)}
+								{option.price > (selectedOption?.price ?? 0) ? '+ ' : '- '}
+								{new Intl.NumberFormat('eu-GR', {
+									style: 'currency',
+									currency: 'EUR',
+									signDisplay: 'never',
+								}).format(option.price - (selectedOption?.price ?? 0))}
 							</span>
 						) : null}
 					</AppleSelectorGroupItem>
