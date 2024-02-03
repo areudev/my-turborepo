@@ -4,6 +4,7 @@ import { cn } from '../utils/misc'
 export function Button({
 	className,
 	children,
+	...props
 }: React.ComponentPropsWithoutRef<'button'>) {
 	return (
 		<button
@@ -12,6 +13,7 @@ export function Button({
 				className,
 			)}
 			type="button"
+			{...props}
 		>
 			{children}
 		</button>

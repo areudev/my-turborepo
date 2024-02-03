@@ -17,9 +17,21 @@ export function SelectorDemo() {
 	const selectedOption = options.find(option => option.value === selectedSize)
 
 	return (
-		<div className="space-y-4">
+		<form
+			className="space-y-4"
+			onSubmit={event => {
+				event.preventDefault()
+				const formData = new FormData(event.currentTarget)
+				const json = JSON.stringify(Object.fromEntries(formData))
+				alert(json)
+			}}
+		>
 			<p>Storage</p>
-			<AppleSelectorGroupRoot onValueChange={v => setSelectedSize(v)}>
+			<AppleSelectorGroupRoot
+				name="storage-new"
+				onValueChange={v => setSelectedSize(v)}
+				value={selectedSize}
+			>
 				{options.map(option => (
 					<AppleSelectorGroupItem
 						className="w-80 items-center justify-between"
@@ -42,9 +54,17 @@ export function SelectorDemo() {
 					</AppleSelectorGroupItem>
 				))}
 			</AppleSelectorGroupRoot>
+			{/* <div>
+				{options.map(option => (
+					<label className="block" key={option.value}>
+						<input name="storage" type="radio" value={option.value} />
+						{option.label}
+					</label>
+				))}
+			</div> */}
 			<div className="text-right">
-				<Button>Continue</Button>
+				<Button type="submit">Continue</Button>
 			</div>
-		</div>
+		</form>
 	)
 }
