@@ -2,6 +2,7 @@ import {
 	AppleSelectorGroupRoot,
 	AppleSelectorGroupItem,
 } from './apple-selector-group'
+import { Button } from './button'
 
 const options = [
 	{ size: '1TB' },
@@ -12,12 +13,22 @@ const options = [
 
 export function SelectorDemo() {
 	return (
-		<AppleSelectorGroupRoot>
-			{options.map(option => (
-				<AppleSelectorGroupItem key={option.size} value={option.size}>
-					{option.size}
-				</AppleSelectorGroupItem>
-			))}
-		</AppleSelectorGroupRoot>
+		<div className="space-y-4">
+			<p>Storage</p>
+			<AppleSelectorGroupRoot>
+				{options.map(option => (
+					<AppleSelectorGroupItem
+						className="w-80"
+						key={option.size}
+						value={option.size}
+					>
+						{option.size} SSD Storage
+					</AppleSelectorGroupItem>
+				))}
+			</AppleSelectorGroupRoot>
+			<div className="text-right">
+				<Button>Continue</Button>
+			</div>
+		</div>
 	)
 }
