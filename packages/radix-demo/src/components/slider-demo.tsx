@@ -14,7 +14,7 @@ export function SliderDemo() {
 				}}
 			>
 				<p className="text-sm  font-medium text-white/60">Settings</p>
-				<div className="flex items-center">
+				<div className="flex items-center gap-3">
 					<SpeakerWave className="h-5 w-5" />
 					<Slider name="what" defaultValue={[25]} className="grow" />
 					<SpeakerXMark className="h-5 w-5" />
