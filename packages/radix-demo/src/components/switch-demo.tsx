@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import { Switch } from './switch'
+import { Switch } from '../lib/switch'
 
 export function SwitchDemo() {
 	const switchId = useId()

@@ -1,9 +1,9 @@
 import { useState } from 'react'
+import { Button } from '../lib/button'
 import {
 	AppleSelectorGroupRoot,
 	AppleSelectorGroupItem,
-} from './apple-selector-group'
-import { Button } from './button'
+} from '../lib/apple-selector-group'
 
 const options = [
 	{ value: '1tb', label: '1TB SSD Storage', price: 0 },
