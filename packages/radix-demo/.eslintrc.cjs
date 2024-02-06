@@ -6,5 +6,13 @@ module.exports = {
 	parserOptions: {
 		project: [`${__dirname}/tsconfig.json`, `${__dirname}/tsconfig.node.json`],
 	},
+	overrides: [
+		{
+			files: ['*.ts', '*.tsx'],
+			rules: {
+				'react/jsx-sort-props': 'off',
+			},
+		},
+	],
 	// plugins: ['@typescript-eslint'],
 }

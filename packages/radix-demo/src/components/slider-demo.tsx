@@ -1,4 +1,5 @@
 import { Slider } from '../lib/slider'
+import { SpeakerWave, SpeakerXMark } from './icons'
 
 export function SliderDemo() {
 	return (
@@ -13,11 +14,12 @@ export function SliderDemo() {
 				}}
 			>
 				<p className="text-sm  font-medium text-white/60">Settings</p>
-				<input className="w-full" name="native" type="range" />
-				<div className="w-full">
-					<Slider name="what" />
+				<div className="flex items-center">
+					<SpeakerWave className="h-5 w-5" />
+					<Slider name="what" defaultValue={[25]} className="grow" />
+					<SpeakerXMark className="h-5 w-5" />
 				</div>
-
+				<input className="w-full" name="native" type="range" />
 				<div className="mt-5 flex items-center justify-between">
 					<button
 						className="rounded bg-white/[.15] px-3 py-1 font-medium text-white"
