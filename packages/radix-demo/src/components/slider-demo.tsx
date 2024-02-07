@@ -1,3 +1,4 @@
+import React from 'react'
 import { Slider } from '../lib/slider'
 import { SpeakerWave, SpeakerXMark } from './icons'
 
@@ -14,19 +15,19 @@ export function SliderDemo() {
 				}}
 			>
 				<p className="text-sm font-medium text-white/60">Settings</p>
-				<div className=" *:duration-[350ms] group flex items-center gap-3 transition-[margin] duration-[350ms] hover:-mx-3">
-					<SpeakerWave className="h-5 w-5 duration-[350ms] group-hover:scale-125" />
+				<div className="*:duration-[350ms] group flex items-center gap-3 transition-[margin] duration-[350ms] hover:-mx-3">
+					<SpeakerXMark className="size-5 duration-[350ms] group-hover:scale-125" />
 					<Slider
 						name="what"
 						defaultValue={[25]}
 						className="grow transition-[height] duration-[350ms] group-hover:h-4"
 					/>
-					<SpeakerXMark className="size-5 duration-[350ms] group-hover:scale-125" />
+					<SpeakerWave className="h-5 w-5 duration-[350ms] group-hover:scale-125" />
 				</div>
 				{/* <input className="w-full" name="native" type="range" /> */}
 				<div className="mt-5 flex items-center justify-between">
 					<button
-						className="rounded bg-white/[.15] px-3 py-1 font-medium text-white"
+						className="focus-visible-visible:outline-2 rounded bg-white/[.15] px-3 py-1 font-medium text-white hover:bg-white/25 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
 						type="submit"
 					>
 						Save
