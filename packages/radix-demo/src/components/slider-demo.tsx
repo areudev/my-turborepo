@@ -14,10 +14,14 @@ export function SliderDemo() {
 				}}
 			>
 				<p className="text-sm font-medium text-white/60">Settings</p>
-				<div className="flex items-center gap-3">
-					<SpeakerWave className="h-5 w-5" />
-					<Slider name="what" defaultValue={[25]} className="grow" />
-					<SpeakerXMark className="h-5 w-5" />
+				<div className="*:duration-[350ms] group flex items-center gap-3 transition-[margin] duration-[350ms]  hover:-mx-3">
+					<SpeakerWave className="h-5 w-5 duration-[350ms] group-hover:scale-125" />
+					<Slider
+						name="what"
+						defaultValue={[25]}
+						className="grow transition-[height] duration-[350ms] group-hover:h-4"
+					/>
+					<SpeakerXMark className="h-5 w-5 duration-[350ms] group-hover:scale-125" />
 				</div>
 				<input className="w-full" name="native" type="range" />
 				<div className="mt-5 flex items-center justify-between">
