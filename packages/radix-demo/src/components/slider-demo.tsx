@@ -14,7 +14,7 @@ export function SliderDemo() {
 				}}
 			>
 				<p className="text-sm font-medium text-white/60">Settings</p>
-				<div className="has-[:focus-visible]:bg-green-500 *:duration-[350ms] group flex items-center gap-3 transition-[margin] duration-[350ms] hover:-mx-3">
+				<div className=" *:duration-[350ms] group flex items-center gap-3 transition-[margin] duration-[350ms] hover:-mx-3">
 					<SpeakerWave className="h-5 w-5 duration-[350ms] group-hover:scale-125" />
 					<Slider
 						name="what"
@@ -23,7 +23,7 @@ export function SliderDemo() {
 					/>
 					<SpeakerXMark className="size-5 duration-[350ms] group-hover:scale-125" />
 				</div>
-				<input className="w-full" name="native" type="range" />
+				{/* <input className="w-full" name="native" type="range" /> */}
 				<div className="mt-5 flex items-center justify-between">
 					<button
 						className="rounded bg-white/[.15] px-3 py-1 font-medium text-white"

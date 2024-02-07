@@ -13,7 +13,7 @@ const Slider = React.forwardRef<
 		ref={ref}
 		{...props}
 	>
-		<SliderPrimitive.Track className="relative h-full grow overflow-hidden rounded-full bg-gray-700">
+		<SliderPrimitive.Track className="group-has-[:focus-visible]:outline-sky-500 group-has-[:focus-visible]:outline group-has-[:focus-visible]:outline-2 group-has-[:focus-visible]:outline-offset-2 relative h-full grow overflow-hidden rounded-full bg-gray-700">
 			<SliderPrimitive.Range className="absolute h-full bg-gray-300 duration-300 hover:bg-white" />
 		</SliderPrimitive.Track>
 		<SliderPrimitive.Thumb />
