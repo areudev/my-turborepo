@@ -3,6 +3,7 @@ import { Slider } from '../lib/slider'
 import { SpeakerWave, SpeakerXMark } from './icons'
 
 export function SliderDemo() {
+	const [internalValue, setInternalValue] = React.useState(25)
 	return (
 		<div className="mx-auto w-full max-w-xs">
 			<form
@@ -19,7 +20,8 @@ export function SliderDemo() {
 					<SpeakerXMark className="size-5 duration-[350ms] group-hover:scale-125" />
 					<Slider
 						name="what"
-						defaultValue={[25]}
+						onValueChange={([v]) => setInternalValue(v)}
+						value={[internalValue]}
 						className="grow transition-[height] duration-[350ms] group-hover:h-4"
 					/>
 					<SpeakerWave className="h-5 w-5 duration-[350ms] group-hover:scale-125" />
