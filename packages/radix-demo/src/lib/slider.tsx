@@ -27,8 +27,6 @@ const Slider = React.forwardRef<
 			{...restRootProps}
 		>
 			<SliderPrimitive.Track
-				// onPointerDown={() => setUsingPointer(true)}
-				// onBlur={() => setUsingPointer(false)}
 				className={cn(
 					'relative h-full overflow-hidden rounded-full bg-gray-700',
 					trackClassName,
@@ -37,12 +35,12 @@ const Slider = React.forwardRef<
 			>
 				<SliderPrimitive.Range
 					className={cn(
-						'absolute h-full bg-gray-300 duration-300 hover:bg-white',
+						'absolute h-full bg-gray-300  hover:bg-white',
 						rangeClassName,
 					)}
 					{...restRangeProps}
 				>
-					<div className="group-has-[:focus-visible]:bg-white absolute  inset-0" />
+					{/* <div className="group-has-[:focus-visible]:bg-white absolute  inset-0" /> */}
 				</SliderPrimitive.Range>
 			</SliderPrimitive.Track>
 			<SliderPrimitive.Thumb />
