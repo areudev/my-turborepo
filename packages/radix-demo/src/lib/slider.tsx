@@ -2,29 +2,46 @@ import * as React from 'react'
 import * as SliderPrimitive from '@radix-ui/react-slider'
 import { cn } from '../utils/misc'
 
+type RootProps = React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
+type TrackProps = React.ComponentPropsWithoutRef<typeof SliderPrimitive.Track>
+type RangeProps = React.ComponentPropsWithoutRef<typeof SliderPrimitive.Range>
+// type ThumbProps = React.ComponentPropsWithoutRef<typeof SliderPrimitive.Thumb>
+
 const Slider = React.forwardRef<
 	React.ElementRef<typeof SliderPrimitive.Root>,
-	React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
->(({ className, ...props }, ref) => {
-	const [usingPointer, setUsingPointer] = React.useState(false)
+	{
+		rootProps?: RootProps
+		trackProps?: TrackProps
+		rangeProps?: RangeProps
+	}
+>((props, ref) => {
+	const { rootProps, rangeProps, trackProps } = props
+	const { className, ...restRootProps } = rootProps || {}
+	const { className: trackClassName, ...restTrackProps } = trackProps || {}
+	const { className: rangeClassName, ...restRangeProps } = rangeProps || {}
 
 	return (
 		<SliderPrimitive.Root
 			className={cn('relative flex h-1.5 items-center rounded-full', className)}
 			ref={ref}
-			{...props}
+			{...restRootProps}
 		>
 			<SliderPrimitive.Track
-				onPointerDown={() => setUsingPointer(true)}
-				onBlur={() => setUsingPointer(false)}
-				className={`${
-					usingPointer
-						? ''
-						: 'group-has-[:focus-visible]:outline group-has-[:focus-visible]:outline-2 group-has-[:focus-visible]:outline-offset-2 group-has-[:focus-visible]:outline-sky-500'
-				}
-  relative h-full grow overflow-hidden rounded-full bg-gray-700`}
+				// onPointerDown={() => setUsingPointer(true)}
+				// onBlur={() => setUsingPointer(false)}
+				className={cn(
+					'relative h-full overflow-hidden rounded-full bg-gray-700',
+					trackClassName,
+				)}
+				{...restTrackProps}
 			>
-				<SliderPrimitive.Range className="group-has-[:focus-visible]:bg-white absolute h-full bg-gray-300 duration-300 hover:bg-white">
+				<SliderPrimitive.Range
+					className={cn(
+						'absolute h-full bg-gray-300 duration-300 hover:bg-white',
+						rangeClassName,
+					)}
+					{...restRangeProps}
+				>
 					<div className="group-has-[:focus-visible]:bg-white absolute  inset-0" />
 				</SliderPrimitive.Range>
 			</SliderPrimitive.Track>
