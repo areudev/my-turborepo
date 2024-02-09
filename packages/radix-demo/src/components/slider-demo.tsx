@@ -5,6 +5,7 @@ import { SpeakerWave, SpeakerXMark } from './icons'
 
 const MIN = 0
 const MAX = 100
+const STEP = 0.1
 
 export function SliderDemo() {
 	const [usingPointer, setUsingPointer] = useState(false)
@@ -34,7 +35,14 @@ export function SliderDemo() {
 							name: 'what',
 							min: MIN,
 							max: MAX,
+							step: STEP,
 							value: [internalValue],
+							onBlur: () => {
+								setUsingPointer(false)
+							},
+							onValueChange: ([value]) => {
+								if (!usingPointer) setInternalValue(value)
+							},
 							className:
 								'grow transition-[height] duration-[350ms] group-hover:h-4',
 						}}
@@ -50,10 +58,12 @@ export function SliderDemo() {
 									const pixelsPerUnit = (MAX - MIN) / sliderWidth
 									const diffInUnits = diffInPixels * pixelsPerUnit
 									const newValue = stash.internalValue + diffInUnits
-									setInternalValue(Math.max(Math.min(newValue, MAX), MIN))
+									const clampedValue = Math.max(Math.min(newValue, MAX), MIN)
+									const stepppedValue = Math.round(clampedValue / STEP) * STEP
+									setInternalValue(Math.round(stepppedValue))
 								}
 							},
-							onBlur: () => setUsingPointer(false),
+
 							className: cn(
 								'grow',
 								!usingPointer &&
