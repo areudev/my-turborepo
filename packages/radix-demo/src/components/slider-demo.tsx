@@ -6,19 +6,31 @@ import { SpeakerWave, SpeakerXMark } from './icons'
 const MIN = 0
 const MAX = 100
 const STEP = 1
+const DEFAULT_VALUE = 50
 
 function SliderVolume({
 	min = MIN,
 	max = MAX,
 	step = STEP,
+	value = DEFAULT_VALUE,
+	onValueChange = () => {
+		/* noop */
+	},
 }: {
 	min?: number
 	max?: number
 	step?: number
+	value?: number
+	onValueChange?: (value: number) => void
 }) {
 	const [usingPointer, setUsingPointer] = useState(false)
-	const [internalValue, setInternalValue] = useState(50)
+	const [internalValue, setInternalValue] = useState(value)
 	const [stash, setStash] = useState({ clientX: 0, internalValue })
+
+	function updateValue(val: number) {
+		setInternalValue(val)
+		onValueChange(val)
+	}
 
 	return (
 		<>
@@ -34,8 +46,8 @@ function SliderVolume({
 						onBlur: () => {
 							setUsingPointer(false)
 						},
-						onValueCommit: ([value]) => {
-							if (!usingPointer) setInternalValue(value)
+						onValueCommit: ([v]) => {
+							if (!usingPointer) updateValue(v)
 						},
 						className:
 							'grow transition-[height] duration-[350ms] group-hover:h-4',
@@ -54,7 +66,7 @@ function SliderVolume({
 								const newValue = stash.internalValue + diffInUnits
 								const clampedValue = Math.max(Math.min(newValue, max), min)
 								const stepppedValue = Math.round(clampedValue / step) * step
-								setInternalValue(stepppedValue)
+								updateValue(stepppedValue)
 							}
 						},
 
@@ -87,10 +99,9 @@ export function SliderDemo() {
 					alert(json)
 				}}
 			>
-				{/* <p>internal value {internalValue}</p> */}
 				<p className="text-sm font-medium text-white/60">Settings</p>
 				<SliderVolume />
-				{/* Rest of the form */}
+				<SliderVolume max={50} min={0} step={5} value={20} />
 				<div className="mt-5 flex items-center justify-between">
 					<button
 						className="focus-visible-visible:outline-2 rounded bg-white/[.15] px-3 py-1 font-medium text-white hover:bg-white/25 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
