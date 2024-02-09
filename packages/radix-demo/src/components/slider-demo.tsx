@@ -5,9 +5,17 @@ import { SpeakerWave, SpeakerXMark } from './icons'
 
 const MIN = 0
 const MAX = 100
-const STEP = 0.1
+const STEP = 1
 
-export function SliderDemo() {
+export function SliderDemo({
+	min = MIN,
+	max = MAX,
+	step = STEP,
+}: {
+	min?: number
+	max?: number
+	step?: number
+}) {
 	const [usingPointer, setUsingPointer] = useState(false)
 	const [internalValue, setInternalValue] = useState(50)
 	const [stash, setStash] = useState({ clientX: 0, internalValue })
@@ -33,14 +41,14 @@ export function SliderDemo() {
 					<Slider
 						rootProps={{
 							name: 'what',
-							min: MIN,
-							max: MAX,
-							step: STEP,
+							min,
+							max,
+							step,
 							value: [internalValue],
 							onBlur: () => {
 								setUsingPointer(false)
 							},
-							onValueChange: ([value]) => {
+							onValueCommit: ([value]) => {
 								if (!usingPointer) setInternalValue(value)
 							},
 							className:
@@ -55,12 +63,12 @@ export function SliderDemo() {
 								if (e.buttons > 0) {
 									const diffInPixels = e.clientX - stash.clientX
 									const sliderWidth = e.currentTarget.clientWidth
-									const pixelsPerUnit = (MAX - MIN) / sliderWidth
+									const pixelsPerUnit = (max - min) / sliderWidth
 									const diffInUnits = diffInPixels * pixelsPerUnit
 									const newValue = stash.internalValue + diffInUnits
-									const clampedValue = Math.max(Math.min(newValue, MAX), MIN)
-									const stepppedValue = Math.round(clampedValue / STEP) * STEP
-									setInternalValue(Math.round(stepppedValue))
+									const clampedValue = Math.max(Math.min(newValue, max), min)
+									const stepppedValue = Math.round(clampedValue / step) * step
+									setInternalValue(stepppedValue)
 								}
 							},
 
