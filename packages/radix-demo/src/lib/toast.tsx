@@ -7,14 +7,14 @@ const ToastProvider = ToastPrimitives.ToastProvider
 const ToastViewport = React.forwardRef<
 	React.ElementRef<typeof ToastPrimitives.ToastViewport>,
 	React.ComponentPropsWithoutRef<typeof ToastPrimitives.ToastViewport>
->(({ className, ...props }, forwardedRef) => {
+>(({ className, ...props }, ref) => {
 	return (
 		<ToastPrimitives.ToastViewport
 			{...props}
-			ref={forwardedRef}
+			ref={ref}
 			className={cn(
 				// 'pointer-events-none fixed inset-0 flex items-end justify-center p-4',
-				'',
+				'fixed right-4 top-4',
 				className,
 			)}
 		/>
@@ -23,11 +23,25 @@ const ToastViewport = React.forwardRef<
 
 ToastViewport.displayName = ToastPrimitives.ToastViewport.displayName
 
-export function Toast() {
+export const Toast = React.forwardRef<
+	React.ElementRef<typeof ToastPrimitives.Root>,
+	React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root>
+>((props, ref) => {
 	return (
-		<div>
-			<h1>Toast</h1>
-			<p>Toast content</p>
-		</div>
+		<ToastProvider>
+			<ToastPrimitives.Root
+				className="rounded border border-gray-500 bg-gray-700 px-6 py-4 text-sm font-medium"
+				{...props}
+				ref={ref}
+			>
+				<ToastPrimitives.Description>
+					Changes saved!
+				</ToastPrimitives.Description>
+			</ToastPrimitives.Root>
+
+			<ToastViewport />
+		</ToastProvider>
 	)
-}
+})
+
+Toast.displayName = ToastPrimitives.Root.displayName
