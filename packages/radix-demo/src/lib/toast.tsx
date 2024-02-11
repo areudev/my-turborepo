@@ -23,6 +23,33 @@ const ToastViewport = React.forwardRef<
 
 ToastViewport.displayName = ToastPrimitives.ToastViewport.displayName
 
+const ToastClose = React.forwardRef<
+	React.ElementRef<typeof ToastPrimitives.Close>,
+	React.ComponentPropsWithoutRef<typeof ToastPrimitives.Close>
+>(({ className, ...props }, ref) => (
+	<ToastPrimitives.Close
+		ref={ref}
+		className={cn('', className)}
+		toast-close=""
+		{...props}
+	>
+		{/* <Cross2Icon className="h-4 w-4" /> */}X
+	</ToastPrimitives.Close>
+))
+ToastClose.displayName = ToastPrimitives.Close.displayName
+
+const ToastDescription = React.forwardRef<
+	React.ElementRef<typeof ToastPrimitives.Description>,
+	React.ComponentPropsWithoutRef<typeof ToastPrimitives.Description>
+>(({ className, ...props }, ref) => (
+	<ToastPrimitives.Description
+		ref={ref}
+		className={cn('', className)}
+		{...props}
+	/>
+))
+ToastDescription.displayName = ToastPrimitives.Description.displayName
+
 export const Toast = React.forwardRef<
 	React.ElementRef<typeof ToastPrimitives.Root>,
 	React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root>
@@ -34,9 +61,8 @@ export const Toast = React.forwardRef<
 				{...props}
 				ref={ref}
 			>
-				<ToastPrimitives.Description>
-					Changes saved!
-				</ToastPrimitives.Description>
+				<ToastDescription>Changes saved!</ToastDescription>
+				<ToastClose />
 			</ToastPrimitives.Root>
 
 			<ToastViewport />
