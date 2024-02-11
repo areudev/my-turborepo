@@ -1,6 +1,7 @@
 import React from 'react'
 import * as ToastPrimitives from '@radix-ui/react-toast'
 import { cn } from '../utils/misc'
+import { XMark } from '../components/icons'
 
 const ToastProvider = ToastPrimitives.ToastProvider
 
@@ -29,11 +30,11 @@ const ToastClose = React.forwardRef<
 >(({ className, ...props }, ref) => (
 	<ToastPrimitives.Close
 		ref={ref}
-		className={cn('', className)}
+		className={cn('text-gray-500 hover:text-gray-200', className)}
 		toast-close=""
 		{...props}
 	>
-		{/* <Cross2Icon className="h-4 w-4" /> */}X
+		<XMark className="size-5 " />
 	</ToastPrimitives.Close>
 ))
 ToastClose.displayName = ToastPrimitives.Close.displayName
@@ -57,7 +58,7 @@ export const Toast = React.forwardRef<
 	return (
 		<ToastProvider>
 			<ToastPrimitives.Root
-				className="rounded border border-gray-500 bg-gray-700 px-6 py-4 text-sm font-medium"
+				className="flex items-center justify-between rounded border border-gray-500 bg-gray-700 px-6 py-4 text-sm font-medium"
 				{...props}
 				ref={ref}
 			>
@@ -65,7 +66,7 @@ export const Toast = React.forwardRef<
 				<ToastClose />
 			</ToastPrimitives.Root>
 
-			<ToastViewport />
+			<ToastViewport className="w-80" />
 		</ToastProvider>
 	)
 })
