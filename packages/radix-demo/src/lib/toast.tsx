@@ -3,7 +3,7 @@ import * as ToastPrimitives from '@radix-ui/react-toast'
 import { cn } from '../utils/misc'
 import { XMark } from '../components/icons'
 
-const ToastProvider = ToastPrimitives.ToastProvider
+export const ToastProvider = ToastPrimitives.ToastProvider
 
 const ToastViewport = React.forwardRef<
 	React.ElementRef<typeof ToastPrimitives.ToastViewport>,
@@ -56,7 +56,7 @@ export const Toast = React.forwardRef<
 	React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root>
 >(({ children, ...props }, ref) => {
 	return (
-		<ToastProvider>
+		<>
 			<ToastPrimitives.Root
 				className="flex items-center justify-between rounded border border-gray-500 bg-gray-700 px-6 py-4 text-sm font-medium"
 				{...props}
@@ -66,8 +66,8 @@ export const Toast = React.forwardRef<
 				<ToastClose />
 			</ToastPrimitives.Root>
 
-			<ToastViewport className="w-80" />
-		</ToastProvider>
+			<ToastViewport className="fixed right-4 top-4 flex w-80 flex-col" />
+		</>
 	)
 })
 
