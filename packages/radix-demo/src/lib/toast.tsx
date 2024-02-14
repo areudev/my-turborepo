@@ -54,7 +54,7 @@ ToastDescription.displayName = ToastPrimitives.Description.displayName
 export const Toast = React.forwardRef<
 	React.ElementRef<typeof ToastPrimitives.Root>,
 	React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root>
->((props, ref) => {
+>(({ children, ...props }, ref) => {
 	return (
 		<ToastProvider>
 			<ToastPrimitives.Root
@@ -62,7 +62,7 @@ export const Toast = React.forwardRef<
 				{...props}
 				ref={ref}
 			>
-				<ToastDescription>Changes saved!</ToastDescription>
+				<ToastDescription>{children}</ToastDescription>
 				<ToastClose />
 			</ToastPrimitives.Root>
 
