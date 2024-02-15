@@ -26,7 +26,14 @@ export function ToastDemo() {
 			</div>
 			<ToastProvider>
 				{toasts.map(toast => (
-					<Toast key={toast.id}>
+					<Toast
+						duration={10000}
+						onOpenChange={() => {
+							setToasts(toasts.filter(t => t.id !== toast.id))
+						}}
+						forceMount
+						key={toast.id}
+					>
 						<ToastDescription>{toast.message}</ToastDescription>
 						<ToastClose />
 					</Toast>

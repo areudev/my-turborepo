@@ -1,9 +1,19 @@
 import React from 'react'
 import * as ToastPrimitives from '@radix-ui/react-toast'
+import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '../utils/misc'
 import { XMark } from '../components/icons'
-import { motion } from 'framer-motion'
-export const ToastProvider = ToastPrimitives.ToastProvider
+
+export function ToastProvider({
+	children,
+	...props
+}: ToastPrimitives.ToastProviderProps) {
+	return (
+		<ToastPrimitives.Provider {...props}>
+			<AnimatePresence mode="popLayout">{children}</AnimatePresence>
+		</ToastPrimitives.Provider>
+	)
+}
 
 export const ToastViewport = React.forwardRef<
 	React.ElementRef<typeof ToastPrimitives.ToastViewport>,
@@ -64,7 +74,8 @@ export const Toast = React.forwardRef<
 			<motion.li
 				initial={{ x: 300 }}
 				animate={{ x: 0 }}
-				// transition={{ duration: 1 }}
+				exit={{ opacity: 0, zIndex: -1 }}
+				transition={{ type: 'spring', bounce: 0.25, duration: 0.6 }}
 				layout
 			>
 				{children}
