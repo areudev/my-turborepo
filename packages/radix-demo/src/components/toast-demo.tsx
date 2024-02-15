@@ -1,26 +1,37 @@
 import { useState } from 'react'
-import { ToastProvider } from '@radix-ui/react-toast'
 import { Button } from '../lib/button'
-import { Toast } from '../lib/toast'
+import {
+	Toast,
+	ToastClose,
+	ToastDescription,
+	ToastProvider,
+	ToastViewport,
+} from '../lib/toast'
 
 export function ToastDemo() {
 	const [toasts, setToasts] = useState<{ id: string; message: string }[]>([])
 	return (
 		<div className="flex self-start p-4">
-			<Button
-				onClick={() => {
-					setToasts([
-						...toasts,
-						{ message: getRandomMessage(), id: crypto.randomUUID() },
-					])
-				}}
-			>
-				Notify
-			</Button>
+			<div>
+				<Button
+					onClick={() => {
+						setToasts([
+							...toasts,
+							{ message: getRandomMessage(), id: crypto.randomUUID() },
+						])
+					}}
+				>
+					Notify
+				</Button>
+			</div>
 			<ToastProvider>
 				{toasts.map(toast => (
-					<Toast key={toast.id}>{toast.message}</Toast>
+					<Toast key={toast.id}>
+						<ToastDescription>{toast.message}</ToastDescription>
+						<ToastClose />
+					</Toast>
 				))}
+				<ToastViewport />
 			</ToastProvider>
 		</div>
 	)
