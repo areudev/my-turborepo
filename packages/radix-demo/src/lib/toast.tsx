@@ -24,7 +24,7 @@ export const ToastViewport = React.forwardRef<
 			{...props}
 			ref={ref}
 			className={cn(
-				'fixed right-4 top-4 flex w-80 flex-col-reverse gap-3',
+				'fixed right-4 top-4 flex w-80 flex-col-reverse gap-3 rounded-lg  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400',
 				className,
 			)}
 		/>
@@ -39,7 +39,10 @@ export const ToastClose = React.forwardRef<
 >(({ className, ...props }, ref) => (
 	<ToastPrimitives.Close
 		ref={ref}
-		className={cn('text-gray-500 hover:text-gray-200', className)}
+		className={cn(
+			'rounded text-gray-500 hover:text-gray-200 focus-visible:text-gray-200 focus-visible:outline  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400',
+			className,
+		)}
 		toast-close=""
 		{...props}
 	>
@@ -65,18 +68,14 @@ export const Toast = React.forwardRef<
 	React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root>
 >(({ children, ...props }, ref) => {
 	return (
-		<ToastPrimitives.Root
-			className="flex items-center justify-between rounded border border-gray-500 bg-gray-700 px-6 py-4 text-sm font-medium"
-			{...props}
-			ref={ref}
-			asChild
-		>
+		<ToastPrimitives.Root ref={ref} asChild {...props}>
 			<motion.li
-				initial={{ x: 300 }}
+				initial={{ x: 'calc(100% + 16px)' }}
 				animate={{ x: 0 }}
-				exit={{ opacity: 0, zIndex: -1 }}
-				transition={{ type: 'spring', bounce: 0.25, duration: 0.6 }}
+				exit={{ opacity: 0, zIndex: -1, transition: { duration: 0.2 } }}
+				transition={{ type: 'spring', bounce: 0, duration: 0.2 }}
 				layout
+				className="flex items-center justify-between rounded-lg border border-gray-500 bg-gray-700 px-6 py-4 text-sm font-medium focus-visible:outline  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400"
 			>
 				{children}
 			</motion.li>
