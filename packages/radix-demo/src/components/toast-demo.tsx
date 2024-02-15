@@ -1,45 +1,19 @@
-import { useState } from 'react'
 import { Button } from '../lib/button'
-import {
-	Toast,
-	ToastClose,
-	ToastDescription,
-	ToastProvider,
-	ToastViewport,
-} from '../lib/toast'
+import { useToast } from '../lib/toast'
 
 export function ToastDemo() {
-	const [toasts, setToasts] = useState<{ id: string; message: string }[]>([])
+	const { showToast } = useToast()
 	return (
 		<div className="flex self-start p-4">
 			<div>
 				<Button
 					onClick={() => {
-						setToasts([
-							...toasts,
-							{ message: getRandomMessage(), id: crypto.randomUUID() },
-						])
+						showToast(getRandomMessage())
 					}}
 				>
 					Notify
 				</Button>
 			</div>
-			<ToastProvider>
-				{toasts.map(toast => (
-					<Toast
-						duration={10000}
-						onOpenChange={() => {
-							setToasts(toasts.filter(t => t.id !== toast.id))
-						}}
-						forceMount
-						key={toast.id}
-					>
-						<ToastDescription>{toast.message}</ToastDescription>
-						<ToastClose />
-					</Toast>
-				))}
-				<ToastViewport />
-			</ToastProvider>
 		</div>
 	)
 }

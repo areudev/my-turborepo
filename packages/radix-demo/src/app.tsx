@@ -3,6 +3,7 @@
 // import { SliderDemo } from './components/slider-demo'
 
 import { ToastDemo } from './components/toast-demo'
+import { ToastProvider } from './lib/toast'
 
 export function App() {
 	return (
@@ -10,7 +11,9 @@ export function App() {
 			{/* <SwitchDemo /> */}
 			{/* <SelectorDemo /> */}
 			{/* <SliderDemo /> */}
-			<ToastDemo />
+			<ToastProvider>
+				<ToastDemo />
+			</ToastProvider>
 		</div>
 	)
 }

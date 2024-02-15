@@ -1,86 +1,113 @@
-import React from 'react'
-import * as ToastPrimitives from '@radix-ui/react-toast'
+import React, {
+	type ElementRef,
+	type ReactNode,
+	createContext,
+	forwardRef,
+	useContext,
+	useState,
+} from 'react'
+import * as RadixToast from '@radix-ui/react-toast'
 import { AnimatePresence, motion } from 'framer-motion'
-import { cn } from '../utils/misc'
 import { XMark } from '../components/icons'
 
-export function ToastProvider({
-	children,
-	...props
-}: ToastPrimitives.ToastProviderProps) {
+const ToastContext = createContext<{
+	showToast: (text: string) => void
+}>({
+	showToast: () => {
+		throw new Error(
+			"You can't call showToast() outside of a <ToastProvider> – add it to your tree.",
+		)
+	},
+})
+
+export function useToast() {
+	return useContext(ToastContext)
+}
+
+export function ToastProvider({ children }: { children: ReactNode }) {
+	const [messages, setMessages] = useState<{ id: string; text: string }[]>([])
+
+	function showToast(text: string) {
+		setMessages(toasts => [
+			...toasts,
+			{
+				id: window.crypto.randomUUID(),
+				text,
+			},
+		])
+	}
+
 	return (
-		<ToastPrimitives.Provider {...props}>
-			<AnimatePresence mode="popLayout">{children}</AnimatePresence>
-		</ToastPrimitives.Provider>
+		<RadixToast.Provider>
+			<ToastContext.Provider value={{ showToast }}>
+				{children}
+			</ToastContext.Provider>
+
+			<AnimatePresence mode="popLayout">
+				{messages.map(toast => (
+					<Toast
+						key={toast.id}
+						text={toast.text}
+						onClose={() =>
+							setMessages(toasts => toasts.filter(t => t.id !== toast.id))
+						}
+					/>
+				))}
+			</AnimatePresence>
+
+			<RadixToast.Viewport className="fixed right-4 top-4 flex w-80 flex-col-reverse gap-3 max-sm:top-20" />
+		</RadixToast.Provider>
 	)
 }
 
-export const ToastViewport = React.forwardRef<
-	React.ElementRef<typeof ToastPrimitives.ToastViewport>,
-	React.ComponentPropsWithoutRef<typeof ToastPrimitives.ToastViewport>
->(({ className, ...props }, ref) => {
+const Toast = forwardRef<
+	ElementRef<typeof RadixToast.Root>,
+	{
+		onClose: () => void
+		text: string
+	}
+>(function Toast({ onClose, text }, forwardedRef) {
+	const width = 320
+	const margin = 16
+
 	return (
-		<ToastPrimitives.ToastViewport
-			{...props}
-			ref={ref}
-			className={cn(
-				'fixed right-4 top-4 flex w-80 flex-col-reverse gap-3 rounded-lg  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400',
-				className,
-			)}
-		/>
-	)
-})
-
-ToastViewport.displayName = ToastPrimitives.ToastViewport.displayName
-
-export const ToastClose = React.forwardRef<
-	React.ElementRef<typeof ToastPrimitives.Close>,
-	React.ComponentPropsWithoutRef<typeof ToastPrimitives.Close>
->(({ className, ...props }, ref) => (
-	<ToastPrimitives.Close
-		ref={ref}
-		className={cn(
-			'rounded text-gray-500 hover:text-gray-200 focus-visible:text-gray-200 focus-visible:outline  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400',
-			className,
-		)}
-		toast-close=""
-		{...props}
-	>
-		<XMark className="size-5 " />
-	</ToastPrimitives.Close>
-))
-ToastClose.displayName = ToastPrimitives.Close.displayName
-
-export const ToastDescription = React.forwardRef<
-	React.ElementRef<typeof ToastPrimitives.Description>,
-	React.ComponentPropsWithoutRef<typeof ToastPrimitives.Description>
->(({ className, ...props }, ref) => (
-	<ToastPrimitives.Description
-		ref={ref}
-		className={cn('', className)}
-		{...props}
-	/>
-))
-ToastDescription.displayName = ToastPrimitives.Description.displayName
-
-export const Toast = React.forwardRef<
-	React.ElementRef<typeof ToastPrimitives.Root>,
-	React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root>
->(({ children, ...props }, ref) => {
-	return (
-		<ToastPrimitives.Root ref={ref} asChild {...props}>
+		<RadixToast.Root
+			ref={forwardedRef}
+			asChild
+			forceMount
+			onOpenChange={onClose}
+			duration={2500}
+		>
 			<motion.li
-				initial={{ x: 'calc(100% + 16px)' }}
-				animate={{ x: 0 }}
-				exit={{ opacity: 0, zIndex: -1, transition: { duration: 0.2 } }}
-				transition={{ type: 'spring', bounce: 0, duration: 0.2 }}
 				layout
-				className="flex items-center justify-between rounded-lg border border-gray-500 bg-gray-700 px-6 py-4 text-sm font-medium focus-visible:outline  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400"
+				initial={{ x: width + margin }}
+				animate={{ x: 0 }}
+				exit={{
+					opacity: 0,
+					zIndex: -1,
+					transition: {
+						opacity: {
+							duration: 0.2,
+						},
+					},
+				}}
+				transition={{
+					type: 'spring',
+					mass: 1,
+					damping: 30,
+					stiffness: 200,
+				}}
+				style={{ width, WebkitTapHighlightColor: 'transparent' }}
 			>
-				{children}
+				<div className="flex items-center justify-between overflow-hidden whitespace-nowrap rounded-lg border border-gray-600 bg-gray-700 text-sm text-white shadow-sm backdrop-blur">
+					<RadixToast.Description className="truncate p-4">
+						{text}
+					</RadixToast.Description>
+					<RadixToast.Close className="border-l border-gray-600/50 p-4 text-gray-500 transition hover:bg-gray-600/30 hover:text-gray-300 active:text-white">
+						<XMark className="h-5 w-5" />
+					</RadixToast.Close>
+				</div>
 			</motion.li>
-		</ToastPrimitives.Root>
+		</RadixToast.Root>
 	)
 })
-
-Toast.displayName = ToastPrimitives.Root.displayName
