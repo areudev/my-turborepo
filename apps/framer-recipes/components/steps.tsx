@@ -58,7 +58,6 @@ function Step({ step, currentStep }: { step: number; currentStep: number }) {
 		<motion.div
 			initial={false}
 			animate={status}
-			// transition={{ duration: 1 }}
 			variants={{
 				inactive: {
 					backgroundColor: '#fff',
@@ -76,6 +75,7 @@ function Step({ step, currentStep }: { step: number; currentStep: number }) {
 					color: '#fff',
 				},
 			}}
+			transition={{ duration: 0.3 }}
 			className={` flex h-10 w-10 items-center justify-center rounded-full border-2 font-semibold`}
 		>
 			<div className="flex items-center justify-center">
@@ -98,7 +98,19 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
 			stroke="currentColor"
 			strokeWidth={3}
 		>
-			<path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+			<motion.path
+				initial={{ pathLength: 0 }}
+				animate={{ pathLength: 1 }}
+				transition={{
+					delay: 0.1,
+					type: 'tween',
+					ease: 'easeInOut',
+					duration: 0.3,
+				}}
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="M5 13l4 4L19 7"
+			/>
 		</svg>
 	)
 }
