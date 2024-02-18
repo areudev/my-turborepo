@@ -56,16 +56,27 @@ function Step({ step, currentStep }: { step: number; currentStep: number }) {
 
 	return (
 		<motion.div
-			animate={{
-				backgroundColor: status === 'complete' ? 'var(--blue-500)' : '#fff',
+			initial={false}
+			animate={status}
+			// transition={{ duration: 1 }}
+			variants={{
+				inactive: {
+					backgroundColor: '#fff',
+					borderColor: 'var(--slate-200)',
+					color: 'var(--slate-400)',
+				},
+				active: {
+					backgroundColor: '#fff',
+					borderColor: 'var(--blue-500)',
+					color: 'var(--blue-500)',
+				},
+				complete: {
+					backgroundColor: 'var(--blue-500)',
+					borderColor: 'var(--blue-500)',
+					color: '#fff',
+				},
 			}}
-			className={`${
-				status === 'active'
-					? 'border-blue-500 bg-white text-blue-500'
-					: status === 'complete'
-						? 'border-blue-500 bg-blue-500'
-						: 'border-slate-200 bg-white text-slate-400'
-			} flex h-10 w-10 items-center justify-center rounded-full border-2 font-semibold`}
+			className={` flex h-10 w-10 items-center justify-center rounded-full border-2 font-semibold`}
 		>
 			<div className="flex items-center justify-center">
 				{status === 'complete' ? (
