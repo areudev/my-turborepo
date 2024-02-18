@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 
 export function Steps() {
 	const [step, setStep] = useState(1)
@@ -46,7 +47,7 @@ export function Steps() {
 }
 
 function Step({ step, currentStep }: { step: number; currentStep: number }) {
-	let status =
+	const status =
 		currentStep === step
 			? 'active'
 			: currentStep < step
@@ -54,7 +55,10 @@ function Step({ step, currentStep }: { step: number; currentStep: number }) {
 				: 'complete'
 
 	return (
-		<div
+		<motion.div
+			animate={{
+				backgroundColor: status === 'complete' ? 'var(--blue-500)' : '#fff',
+			}}
 			className={`${
 				status === 'active'
 					? 'border-blue-500 bg-white text-blue-500'
@@ -70,7 +74,7 @@ function Step({ step, currentStep }: { step: number; currentStep: number }) {
 					<span>{step}</span>
 				)}
 			</div>
-		</div>
+		</motion.div>
 	)
 }
 
