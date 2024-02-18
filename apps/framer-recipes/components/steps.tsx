@@ -55,18 +55,19 @@ function Step({ step, currentStep }: { step: number; currentStep: number }) {
 				: 'complete'
 
 	return (
-		<div className="relative">
+		<motion.div animate={status} className="relative">
 			<motion.div
-				animate={status}
 				className="absolute inset-0 rounded-full bg-blue-200"
 				variants={{
+					active: {
+						scale: 1,
+						transition: {
+							delay: 0,
+							duration: 0.3,
+						},
+					},
 					complete: {
 						scale: 1.25,
-						// opacity: 1,
-					},
-					active: {
-						scale: 1.1,
-						// opacity: 0,
 					},
 				}}
 				transition={{
@@ -78,7 +79,6 @@ function Step({ step, currentStep }: { step: number; currentStep: number }) {
 			/>
 			<motion.div
 				initial={false}
-				animate={status}
 				variants={{
 					inactive: {
 						backgroundColor: '#fff',
@@ -107,7 +107,7 @@ function Step({ step, currentStep }: { step: number; currentStep: number }) {
 					)}
 				</div>
 			</motion.div>
-		</div>
+		</motion.div>
 	)
 }
 
