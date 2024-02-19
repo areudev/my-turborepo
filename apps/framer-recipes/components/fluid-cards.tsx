@@ -5,22 +5,24 @@ export function FluitCards() {
 				{imageIds.map(item => (
 					<li
 						key={item}
-						className="group relative h-[500px] w-full overflow-hidden rounded-2xl bg-rose-300"
+						className="group relative h-[500px] w-full flex-1 overflow-hidden rounded-2xl bg-rose-300 transition-all hover:grow-[1.3]"
 					>
 						<img
 							src={`https://images.unsplash.com/photo-${item}?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dmlicmFudHxlbnwwfHwwfHx8MA%3D%3D`}
-							alt=""
+							alt="yo"
 							className="absolute inset-0 h-full w-full object-cover"
 						/>
-						<div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 from-30%  p-4">
-							<h2 className="text-2xl font-medium text-white">
-								The card title is here.
-							</h2>
-							<div className="grid grid-rows-[0fr] transition-all group-hover:grid-rows-[1fr]">
-								<p className="mt-2 overflow-hidden text-white/70 transition-all ">
-									Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-									Minima quia ipsa eius.
-								</p>
+						<div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 from-30% p-4 ">
+							<div className="w-48">
+								<h2 className="text-2xl font-medium leading-tight text-white">
+									The card title is here.
+								</h2>
+								<div className="grid grid-rows-[0fr] transition-all group-hover:grid-rows-[1fr]">
+									<p className="mt-2 overflow-hidden text-white/70 opacity-0 transition-all duration-300 group-hover:opacity-100 ">
+										Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+										Minima quia ipsa eius.
+									</p>
+								</div>
 							</div>
 						</div>
 					</li>
