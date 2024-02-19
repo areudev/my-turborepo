@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { EnvelopeOpenIcon } from '@radix-ui/react-icons'
 
 const titles = [
@@ -41,21 +42,33 @@ export default function Email() {
 						</div>
 					</div>
 					<ul className="overflow-y-scroll px-3 pt-2">
-						{[...messages].reverse().map(mid => (
-							<li key={mid} className="relative py-0.5">
-								<button
-									onClick={() => archiveMessage(mid)}
-									className="block w-full cursor-pointer truncate rounded px-3 py-3 text-left hover:bg-slate-200"
+						<AnimatePresence initial={false}>
+							{[...messages].reverse().map(mid => (
+								<motion.li
+									initial={{ opacity: 0, height: 0 }}
+									animate={{ opacity: 1, height: 'auto' }}
+									// transition={{ type: 'spring', bounce: '0.5', duration: 1 }}
+									transition={{ opacity: { duration: 0.2 } }}
+									exit={{ opacity: 0, height: 0 }}
+									key={mid}
+									className="relative"
 								>
-									<p className="truncate text-sm font-medium text-slate-500">
-										{titles[mid % titles.length][0]}
-									</p>
-									<p className="truncate text-xs text-slate-400">
-										{titles[mid % titles.length][1]}
-									</p>
-								</button>
-							</li>
-						))}
+									<div className="py-0.5">
+										<button
+											onClick={() => archiveMessage(mid)}
+											className="block w-full cursor-pointer truncate rounded px-3 py-3 text-left hover:bg-slate-200"
+										>
+											<p className="truncate text-sm font-medium text-slate-500">
+												{titles[mid % titles.length][0]}
+											</p>
+											<p className="truncate text-xs text-slate-400">
+												{titles[mid % titles.length][1]}
+											</p>
+										</button>
+									</div>
+								</motion.li>
+							))}
+						</AnimatePresence>
 					</ul>
 				</div>
 				<div className="flex-1 overflow-y-scroll border-l px-8 py-8">
