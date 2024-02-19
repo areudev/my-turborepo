@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { EnvelopeOpenIcon } from '@radix-ui/react-icons'
+import { EnvelopeOpenIcon, ArchiveIcon } from '@radix-ui/react-icons'
 
 const titles = [
 	["Apple's newest iPhone is here", 'Watch our July event'],
@@ -17,16 +17,24 @@ const titles = [
 
 export default function Email() {
 	const [messages, setMessages] = useState(Array.from(Array(9).keys()))
+	const [selected, setSelected] = useState<Array<number>>([])
+	console.log(selected)
+	function toggleMessage(mid: number) {
+		if (selected.includes(mid)) {
+			setSelected(selected.filter(id => id !== mid))
+		} else {
+			setSelected(selected => [...selected, mid])
+		}
+	}
 
 	function addMessage() {
 		const newId = (messages.at(-1) || 0) + 1
 		setMessages(messages => [...messages, newId])
 	}
-
-	function archiveMessage(mid: number) {
-		setMessages(messages => messages.filter(id => id !== mid))
+	function archiveMessages() {
+		setMessages(messages.filter(mid => !selected.includes(mid)))
+		setSelected([])
 	}
-
 	return (
 		<div className="flex h-screen flex-col items-center justify-center overscroll-y-contain bg-gradient-to-br from-slate-700 to-slate-900 px-6 py-8 text-slate-600">
 			<div className="mx-auto flex w-full max-w-3xl flex-1 overflow-hidden rounded-2xl bg-white ">
@@ -38,6 +46,12 @@ export default function Email() {
 								className="-mx-2 rounded px-2 py-1 text-slate-400 hover:text-slate-500 active:bg-slate-200"
 							>
 								<EnvelopeOpenIcon className="h-5 w-5 " />
+							</button>
+							<button
+								onClick={archiveMessages}
+								className="-mx-2 rounded px-2 py-1 text-slate-400 hover:text-slate-500 active:bg-slate-200"
+							>
+								<ArchiveIcon className="h-5 w-5 " />
 							</button>
 						</div>
 					</div>
@@ -55,13 +69,29 @@ export default function Email() {
 								>
 									<div className="py-0.5">
 										<button
-											onClick={() => archiveMessage(mid)}
-											className="block w-full cursor-pointer truncate rounded px-3 py-3 text-left hover:bg-slate-200"
+											onClick={() => toggleMessage(mid)}
+											className={`${
+												selected.includes(mid)
+													? 'bg-blue-500'
+													: 'hover:bg-slate-200'
+											} block w-full cursor-pointer truncate rounded px-3 py-3 text-left `}
 										>
-											<p className="truncate text-sm font-medium text-slate-500">
+											<p
+												className={`${
+													selected.includes(mid)
+														? 'text-white'
+														: 'text-slate-500'
+												} truncate text-sm font-medium `}
+											>
 												{titles[mid % titles.length][0]}
 											</p>
-											<p className="truncate text-xs text-slate-400">
+											<p
+												className={`${
+													selected.includes(mid)
+														? 'text-blue-200'
+														: 'text-slate-400'
+												} truncate text-xs `}
+											>
 												{titles[mid % titles.length][1]}
 											</p>
 										</button>
