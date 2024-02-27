@@ -3,21 +3,55 @@
 import { useMotionValue, useScroll, motion, useTransform } from 'framer-motion'
 import { useEffect } from 'react'
 
-export function FixedHeader() {
-	const { scrollY } = useScroll()
-	// const height = useTransform(scrollY, v => Math.max(80 - 0.1 * v, 50))
-	const height = useMotionValue(80)
+const clamp = (value: number, min: number, max: number) =>
+	Math.min(Math.max(value, min), max)
 
+function useBoundedScroll(bounds: number) {
+	const { scrollY } = useScroll()
+	const scrollYBounded = useMotionValue(0)
 	useEffect(() => {
 		return scrollY.on('change', current => {
 			const previous = scrollY.getPrevious()
 			const diff = current - (previous ?? current)
+			const newScrollYBounded = scrollYBounded.get() + diff
 
-			height.set(Math.max(50, Math.min(80, height.get() - diff)))
-			console.log(diff)
+			scrollYBounded.set(clamp(newScrollYBounded, 0, bounds))
 		})
-	}, [scrollY, height])
-	console.log(scrollY.get())
+	}, [])
+
+	return { scrollYBounded }
+}
+
+export function FixedHeader() {
+	const bounds = 50
+	const { scrollYBounded } = useBoundedScroll(bounds)
+	const height = useTransform(scrollYBounded, [0, bounds], [80, 50])
+	const opacity = useTransform(scrollYBounded, [0, bounds], [1, 0])
+
+	useEffect(() => {
+		return scrollYBounded.on('change', v => {
+			console.log(v)
+		})
+	}, [scrollYBounded])
+
+	// const { scrollY } = useScroll()
+	// // const height = useTransform(scrollY, v => Math.max(80 - 0.1 * v, 50))
+	// const height = useMotionValue(80)
+	// const opacity = useMotionValue(1)
+
+	// useEffect(() => {
+	// 	return scrollY.on('change', current => {
+	// 		const previous = scrollY.getPrevious()
+	// 		const diff = current - (previous ?? current)
+	// 		const newHeight = height.get() - diff
+	// 		const newOpacity = opacity.get() - diff * 0.1
+
+	// 		height.set(clamp(newHeight, 50, 80))
+	// 		opacity.set(clamp(newOpacity, 0, 1))
+	// 		console.log(diff)
+	// 	})
+	// }, [scrollY, height])
+	// console.log(scrollY.get())
 
 	return (
 		<div className="mx-auto flex w-full max-w-3xl flex-1 overflow-hidden text-slate-600">
@@ -37,11 +71,16 @@ export function FixedHeader() {
 								Daily Bugle
 							</span>
 						</p>
-						<nav className="flex space-x-4 text-xs font-medium text-slate-400">
+						<motion.nav
+							style={{
+								opacity: opacity,
+							}}
+							className="flex space-x-4 text-xs font-medium text-slate-400"
+						>
 							<a href="#">News</a>
 							<a href="#">Sports</a>
 							<a href="#">Culture</a>
-						</nav>
+						</motion.nav>
 					</div>
 				</motion.header>
 
