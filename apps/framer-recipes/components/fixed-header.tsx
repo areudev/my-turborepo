@@ -8,7 +8,7 @@ export function FixedHeader() {
 	const height = useMotionValue(80)
 
 	useEffect(() => {
-		return scrollY.onChange(current => {
+		return scrollY.on('change', current => {
 			const previous = scrollY.getPrevious()
 			const diff = current - (previous ?? current)
 			const newHeight = height.get() - diff
