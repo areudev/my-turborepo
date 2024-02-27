@@ -5,13 +5,18 @@ import { useEffect } from 'react'
 
 export function FixedHeader() {
 	const { scrollY } = useScroll()
-	const height = useTransform(scrollY, v => Math.max(80 - 0.1 * v, 50))
+	// const height = useTransform(scrollY, v => Math.max(80 - 0.1 * v, 50))
+	const height = useMotionValue(80)
 
 	useEffect(() => {
 		return scrollY.on('change', current => {
-			console.log(current)
+			const previous = scrollY.getPrevious()
+			const diff = current - (previous ?? current)
+
+			height.set(Math.max(50, Math.min(80, height.get() - diff)))
+			console.log(diff)
 		})
-	}, [scrollY])
+	}, [scrollY, height])
 	console.log(scrollY.get())
 
 	return (
@@ -64,16 +69,3 @@ export function FixedHeader() {
 		</div>
 	)
 }
-
-// const { scrollY } = useScroll()
-// const height = useMotionValue(80)
-
-// useEffect(() => {
-// 	return scrollY.on('change', current => {
-// 		const previous = scrollY.getPrevious()
-// 		const diff = current - (previous ?? current)
-// 		const newHeight = height.get() - diff
-
-// 		height.set(Math.max(0, Math.min(80, newHeight)))
-// 	})
-// }, [height, scrollY])
