@@ -1,26 +1,26 @@
 'use client'
 
-import { useMotionValue, useScroll, motion } from 'framer-motion'
+import { useMotionValue, useScroll, motion, useTransform } from 'framer-motion'
 import { useEffect } from 'react'
 
 export function FixedHeader() {
 	const { scrollY } = useScroll()
-	const height = useMotionValue(80)
+	const height = useTransform(scrollY, v => Math.max(80 - 0.1 * v, 50))
 
 	useEffect(() => {
 		return scrollY.on('change', current => {
-			const previous = scrollY.getPrevious()
-			const diff = current - (previous ?? current)
-			const newHeight = height.get() - diff
-
-			height.set(Math.max(0, Math.min(80, newHeight)))
+			console.log(current)
 		})
-	}, [height, scrollY])
+	}, [scrollY])
+	console.log(scrollY.get())
+
 	return (
 		<div className="mx-auto flex w-full max-w-3xl flex-1 overflow-hidden text-slate-600">
 			<div className="z-0 flex-1 overflow-y-scroll">
 				<motion.header
-					style={{ height }}
+					style={{
+						height,
+					}}
 					className="fixed inset-x-0 flex h-20 bg-white shadow"
 				>
 					<div className="mx-auto flex w-full max-w-3xl items-center justify-between px-8">
@@ -64,3 +64,16 @@ export function FixedHeader() {
 		</div>
 	)
 }
+
+// const { scrollY } = useScroll()
+// const height = useMotionValue(80)
+
+// useEffect(() => {
+// 	return scrollY.on('change', current => {
+// 		const previous = scrollY.getPrevious()
+// 		const diff = current - (previous ?? current)
+// 		const newHeight = height.get() - diff
+
+// 		height.set(Math.max(0, Math.min(80, newHeight)))
+// 	})
+// }, [height, scrollY])
