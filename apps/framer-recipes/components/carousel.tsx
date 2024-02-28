@@ -33,7 +33,7 @@ export function Carousel() {
 							</motion.div>
 						</div>
 
-						<AnimatePresence>
+						<AnimatePresence initial={false}>
 							{index > 0 && (
 								<motion.button
 									initial={{ opacity: 0 }}
@@ -48,7 +48,7 @@ export function Carousel() {
 							)}
 						</AnimatePresence>
 
-						<AnimatePresence>
+						<AnimatePresence initial={false}>
 							{index + 1 < images.length && (
 								<motion.button
 									initial={{ opacity: 0 }}
