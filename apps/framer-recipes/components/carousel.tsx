@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
 import { CaretLeftIcon, CaretRightIcon } from '@radix-ui/react-icons'
+// @ts-expect-error
+import useKeypress from 'react-use-keypress'
 
 const images = [
 	'/1.jpeg',
@@ -21,6 +23,17 @@ const gap = 2
 export function Carousel() {
 	const [index, setIndex] = useState(1)
 
+	useKeypress('ArrowRight', () => {
+		if (index + 1 < images.length) {
+			setIndex(index + 1)
+		}
+	})
+
+	useKeypress('ArrowLeft', () => {
+		if (index > 0) {
+			setIndex(index - 1)
+		}
+	})
 	return (
 		<MotionConfig transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}>
 			<div className="h-full bg-black">
