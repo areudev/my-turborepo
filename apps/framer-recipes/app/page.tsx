@@ -1,4 +1,4 @@
-// import { Steps } from '@/components/steps'
+import { Steps } from '@/components/steps'
 // import { FluitCards } from '@/components/fluid-cards'
 import { Carousel } from '@/components/carousel'
 import Email from '@/components/email'

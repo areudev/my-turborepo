@@ -15,7 +15,8 @@ const images = [
 
 const collapsedAspectRatio = 1 / 2
 const expandedAspectRatio = 3 / 2
-const margin = 16
+const margin = 6
+const gap = 2
 
 export function Carousel() {
 	const [index, setIndex] = useState(1)
@@ -27,8 +28,9 @@ export function Carousel() {
 					<div className="relative">
 						<div className="relative overflow-hidden">
 							<motion.div animate={{ x: `-${index * 100}%` }} className="flex">
-								{images.map(image => (
-									<img
+								{images.map((image, i) => (
+									<motion.img
+										animate={{ opacity: i === index ? 1 : 0.3 }}
 										key={image}
 										src={image}
 										className="aspect-[3/2] object-cover"
@@ -69,23 +71,35 @@ export function Carousel() {
 					</div>
 					<div className="absolute inset-x-0 bottom-6 flex h-14 justify-center overflow-x-hidden">
 						<motion.div
+							initial={false}
 							animate={{
 								x: `-${
 									index * 100 * (collapsedAspectRatio / expandedAspectRatio) +
-									margin
+									margin * index * gap
 								}%`,
 							}}
-							style={{ aspectRatio: expandedAspectRatio }}
+							style={{ aspectRatio: expandedAspectRatio, gap: `${gap}%` }}
 							className="flex "
 						>
 							{images.map((image, i) => (
 								<motion.button
 									onClick={() => setIndex(i)}
-									animate={{
-										aspectRatio:
-											i === index ? expandedAspectRatio : collapsedAspectRatio,
-										marginLeft: i === index ? `${margin}%` : 0,
-										marginRight: i === index ? `${margin}%` : 0,
+									initial={false}
+									whileHover={{ opacity: 1 }}
+									animate={i === index ? 'active' : 'inactive'}
+									variants={{
+										active: {
+											aspectRatio: expandedAspectRatio,
+											marginLeft: `${margin}%`,
+											marginRight: `${margin}%`,
+											opacity: 1,
+										},
+										inactive: {
+											aspectRatio: collapsedAspectRatio,
+											marginLeft: 0,
+											marginRight: 0,
+											opacity: 0.5,
+										},
 									}}
 									className="shrink-0"
 									key={image}
