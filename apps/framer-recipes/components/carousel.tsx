@@ -13,6 +13,10 @@ const images = [
 	'/6.jpeg',
 ]
 
+const collapsedAspectRatio = 1 / 2
+const expandedAspectRatio = 3 / 2
+const margin = 16
+
 export function Carousel() {
 	const [index, setIndex] = useState(1)
 
@@ -62,6 +66,34 @@ export function Carousel() {
 								</motion.button>
 							)}
 						</AnimatePresence>
+					</div>
+					<div className="absolute inset-x-0 bottom-6 flex h-14 justify-center overflow-x-hidden">
+						<motion.div
+							animate={{
+								x: `-${
+									index * 100 * (collapsedAspectRatio / expandedAspectRatio) +
+									margin
+								}%`,
+							}}
+							style={{ aspectRatio: expandedAspectRatio }}
+							className="flex "
+						>
+							{images.map((image, i) => (
+								<motion.button
+									onClick={() => setIndex(i)}
+									animate={{
+										aspectRatio:
+											i === index ? expandedAspectRatio : collapsedAspectRatio,
+										marginLeft: i === index ? `${margin}%` : 0,
+										marginRight: i === index ? `${margin}%` : 0,
+									}}
+									className="shrink-0"
+									key={image}
+								>
+									<img src={image} className=" h-full object-cover" />
+								</motion.button>
+							))}
+						</motion.div>
 					</div>
 				</div>
 			</div>
