@@ -5,13 +5,14 @@ import { useState } from 'react'
 import { CheckIcon } from '@radix-ui/react-icons'
 import { createContext } from 'react'
 import { useContext } from 'react'
+import useMeasure from 'react-use-measure'
 
-const transition = { type: 'ease', ease: 'easeInOut', duration: 1 }
-
-type Status = 'idle' | 'saving' | 'success'
+const transition = { type: 'ease', ease: 'easeInOut', duration: 3 }
 
 export function ResisablePanel() {
 	const [status, setStatus] = useState('idle')
+	const [ref, bounds] = useMeasure()
+	console.log(bounds.height)
 
 	return (
 		<MotionConfig transition={transition}>
@@ -21,62 +22,63 @@ export function ResisablePanel() {
 						<div className="px-8 pt-8">
 							<p className="text-lg text-white">Reset password</p>
 						</div>
-
 						<motion.div
 							animate={{
-								height: status === 'idle' || status === 'saving' ? 204 : 84,
+								height: bounds.height,
 							}}
 						>
-							<AnimatePresence mode="wait">
-								{status === 'idle' || status === 'saving' ? (
-									<motion.div
-										exit={{
-											opacity: 0,
-										}}
-										transition={{
-											...transition,
-											duration: transition.duration / 2,
-										}}
-										key="form"
-									>
-										<Form
-											onSubmit={async () => await delay(1000)}
-											afterSave={() => setStatus('success')}
-											className="p-8"
+							<div ref={ref}>
+								<AnimatePresence mode="wait">
+									{status === 'idle' || status === 'saving' ? (
+										<motion.div
+											exit={{
+												opacity: 0,
+											}}
+											transition={{
+												...transition,
+												duration: transition.duration / 2,
+											}}
+											key="form"
 										>
-											<p className="text-sm text-zinc-400">
-												Enter your email to get a password reset link:
+											<Form
+												onSubmit={async () => await delay(1000)}
+												afterSave={() => setStatus('success')}
+												className="p-8"
+											>
+												<p className="text-sm text-zinc-400">
+													Enter your email to get a password reset link:
+												</p>
+												<div className="mt-3">
+													<input
+														className="block w-full rounded border-none p-2 text-slate-900"
+														type="email"
+														required
+														defaultValue="sam@buildui.com"
+													/>
+												</div>
+												<div className="mt-8 text-right">
+													<Form.Button className="rounded bg-indigo-500 px-5 py-2 text-sm font-medium text-white ">
+														Email me my link
+													</Form.Button>
+												</div>
+											</Form>
+										</motion.div>
+									) : (
+										<motion.div
+											initial={{ opacity: 0 }}
+											animate={{ opacity: 1 }}
+											transition={{
+												...transition,
+												duration: transition.duration / 2,
+											}}
+										>
+											<p className="p-8 text-sm text-zinc-400">
+												Email sent! Check your inbox to continue.
 											</p>
-											<div className="mt-3">
-												<input
-													className="block w-full rounded border-none p-2 text-slate-900"
-													type="email"
-													required
-													defaultValue="sam@buildui.com"
-												/>
-											</div>
-											<div className="mt-8 text-right">
-												<Form.Button className="rounded bg-indigo-500 px-5 py-2 text-sm font-medium text-white ">
-													Email me my link
-												</Form.Button>
-											</div>
-										</Form>
-									</motion.div>
-								) : (
-									<motion.div
-										initial={{ opacity: 0 }}
-										animate={{ opacity: 1 }}
-										transition={{
-											...transition,
-											duration: transition.duration / 2,
-										}}
-									>
-										<p className="p-8 text-sm text-zinc-400">
-											Email sent! Check your inbox to continue.
-										</p>
-									</motion.div>
-								)}
-							</AnimatePresence>
+										</motion.div>
+									)}
+								</AnimatePresence>
+							</div>
 						</motion.div>
 					</div>
 
