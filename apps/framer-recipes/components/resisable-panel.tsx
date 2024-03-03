@@ -14,7 +14,7 @@ export function ResisablePanel() {
 	const [status, setStatus] = useState('idle')
 
 	return (
-		<MotionConfig transition={{ duration: 1 }}>
+		<MotionConfig transition={transition}>
 			<div className="flex min-h-screen flex-col items-start bg-zinc-900 pt-28">
 				<div className="mx-auto w-full max-w-md">
 					<div className="overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-800">
@@ -32,6 +32,10 @@ export function ResisablePanel() {
 									<motion.div
 										exit={{
 											opacity: 0,
+										}}
+										transition={{
+											...transition,
+											duration: transition.duration / 2,
 										}}
 										key="form"
 									>
@@ -59,7 +63,14 @@ export function ResisablePanel() {
 										</Form>
 									</motion.div>
 								) : (
-									<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+									<motion.div
+										initial={{ opacity: 0 }}
+										animate={{ opacity: 1 }}
+										transition={{
+											...transition,
+											duration: transition.duration / 2,
+										}}
+									>
 										<p className="p-8 text-sm text-zinc-400">
 											Email sent! Check your inbox to continue.
 										</p>
