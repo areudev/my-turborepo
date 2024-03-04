@@ -7,7 +7,7 @@ import { createContext } from 'react'
 import { useContext } from 'react'
 import useMeasure from 'react-use-measure'
 
-const transition = { type: 'ease', ease: 'easeInOut', duration: 3 }
+const transition = { type: 'ease', ease: 'easeInOut', duration: 0.4 }
 
 export function ResisablePanel() {
 	const [status, setStatus] = useState('idle')
@@ -24,11 +24,13 @@ export function ResisablePanel() {
 						</div>
 						<motion.div
 							animate={{
-								height: bounds.height,
+								// height: bounds.height,
+								height: bounds.height > 0 ? bounds.height : undefined,
 							}}
+							transition={{ type: 'spring', bounce: 0.2, duration: 0.8 }}
 						>
 							<div ref={ref}>
-								<AnimatePresence mode="wait">
+								<AnimatePresence mode="popLayout">
 									{status === 'idle' || status === 'saving' ? (
 										<motion.div
 											exit={{
@@ -70,6 +72,7 @@ export function ResisablePanel() {
 											transition={{
 												...transition,
 												duration: transition.duration / 2,
+												delay: transition.duration / 2,
 											}}
 										>
 											<p className="p-8 text-sm text-zinc-400">
