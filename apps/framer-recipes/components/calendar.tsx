@@ -1,7 +1,15 @@
 'use client'
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
-import { addMonths, format, parse, subMonths } from 'date-fns'
+import {
+	addMonths,
+	eachDayOfInterval,
+	endOfMonth,
+	format,
+	parse,
+	startOfMonth,
+	subMonths,
+} from 'date-fns'
 import { useState } from 'react'
 
 export default function Calendar() {
@@ -16,9 +24,13 @@ export default function Calendar() {
 
 	function previousMonth() {
 		const previous = subMonths(month, 1)
-
 		setMonthString(format(previous, 'yyyy-MM'))
 	}
+
+	const days = eachDayOfInterval({
+		start: startOfMonth(month),
+		end: endOfMonth(month),
+	})
 
 	return (
 		<div className="flex min-h-screen items-start bg-stone-800 pt-16 text-stone-900">
@@ -43,13 +55,9 @@ export default function Calendar() {
 							</button>
 						</header>
 						<div className="grid grid-cols-7">
-							<span>1</span>
-							<span>2</span>
-							<span>3</span>
-							<span>4</span>
-							<span>5</span>
-							<span>6</span>
-							<span>7</span>
+							{days.map(day => (
+								<span key={format(day, 'yyyy-MM-dd')}>{format(day, 'd')}</span>
+							))}
 						</div>
 					</div>
 				</div>
