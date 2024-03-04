@@ -5,9 +5,12 @@ import {
 	addMonths,
 	eachDayOfInterval,
 	endOfMonth,
+	endOfWeek,
 	format,
+	isSameMonth,
 	parse,
 	startOfMonth,
+	startOfWeek,
 	subMonths,
 } from 'date-fns'
 import { useState } from 'react'
@@ -28,8 +31,8 @@ export default function Calendar() {
 	}
 
 	const days = eachDayOfInterval({
-		start: startOfMonth(month),
-		end: endOfMonth(month),
+		start: startOfWeek(startOfMonth(month)),
+		end: endOfWeek(endOfMonth(month)),
 	})
 
 	return (
@@ -54,9 +57,24 @@ export default function Calendar() {
 								<ChevronRightIcon className="h-4 w-4" />
 							</button>
 						</header>
-						<div className="grid grid-cols-7">
+						<div className="mt-6 grid grid-cols-7 gap-y-6 px-8">
+							<span className="font-medium text-stone-500">Su</span>
+							<span className="font-medium text-stone-500">Mo</span>
+							<span className="font-medium text-stone-500">Tu</span>
+							<span className="font-medium text-stone-500">We</span>
+							<span className="font-medium text-stone-500">Th</span>
+							<span className="font-medium text-stone-500">Fr</span>
+							<span className="font-medium text-stone-500">Sa</span>
+
 							{days.map(day => (
-								<span key={format(day, 'yyyy-MM-dd')}>{format(day, 'd')}</span>
+								<span
+									className={`${
+										isSameMonth(day, month) ? '' : 'text-stone-300'
+									} font-semibold `}
+									key={format(day, 'yyyy-MM-dd')}
+								>
+									{format(day, 'd')}
+								</span>
 							))}
 						</div>
 					</div>
