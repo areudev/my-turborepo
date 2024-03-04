@@ -14,7 +14,7 @@ import {
 	subMonths,
 } from 'date-fns'
 import { useState } from 'react'
-import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
+import { AnimatePresence, MotionConfig, Variants, motion } from 'framer-motion'
 
 export default function Calendar() {
 	const [monthString, setMonthString] = useState(format(new Date(), 'yyyy-MM'))
@@ -37,17 +37,17 @@ export default function Calendar() {
 	})
 
 	return (
-		<MotionConfig transition={{ duration: 3 }}>
+		<MotionConfig transition={{ duration: 1 }}>
 			<div className="flex min-h-screen items-start bg-stone-800 pt-16 text-stone-900">
 				<div className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl bg-white">
 					<div className="py-8">
 						<div className="flex flex-col justify-center rounded text-center">
 							<AnimatePresence mode="popLayout" initial={false}>
 								<motion.div
+									initial="enter"
+									animate="middle"
+									exit="exit"
 									key={monthString}
-									initial={{ x: '100%' }}
-									animate={{ x: '0%' }}
-									exit={{ x: '-100%' }}
 								>
 									<header className="relative flex justify-between px-8">
 										<button
@@ -56,9 +56,13 @@ export default function Calendar() {
 										>
 											<ChevronLeftIcon className="h-4 w-4" />
 										</button>
-										<p className="absolute inset-0 flex items-center justify-center font-semibold">
+
+										<motion.p
+											variants={variants}
+											className="absolute inset-0 flex items-center justify-center font-semibold"
+										>
 											{format(month, 'MMMM yyyy')}
-										</p>
+										</motion.p>
 										<button
 											className="z-10 rounded-full p-1.5 hover:bg-stone-100"
 											onClick={nextMonth}
@@ -74,6 +78,11 @@ export default function Calendar() {
 										<span className="font-medium text-stone-500">Th</span>
 										<span className="font-medium text-stone-500">Fr</span>
 										<span className="font-medium text-stone-500">Sa</span>
+									</div>
+									<motion.div
+										variants={variants}
+										className="mt-6 grid grid-cols-7 gap-y-6 px-8"
+									>
 										{days.map(day => (
 											<span
 												className={`${
@@ -84,7 +93,7 @@ export default function Calendar() {
 												{format(day, 'd')}
 											</span>
 										))}
-									</div>
+									</motion.div>
 								</motion.div>
 							</AnimatePresence>
 						</div>
@@ -93,4 +102,10 @@ export default function Calendar() {
 			</div>
 		</MotionConfig>
 	)
+}
+
+const variants: Variants = {
+	enter: { x: '100%' },
+	middle: { x: '0%' },
+	exit: { x: '-100%' },
 }
