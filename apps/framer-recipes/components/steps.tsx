@@ -97,7 +97,7 @@ function Step({ step, currentStep }: { step: number; currentStep: number }) {
 					},
 				}}
 				transition={{ duration: 0.3 }}
-				className={`relative flex h-10 w-10 items-center justify-center rounded-full border-2 font-semibold`}
+				className="relative flex h-10 w-10 items-center justify-center rounded-full border-2 font-semibold"
 			>
 				<div className="flex items-center justify-center">
 					{status === 'complete' ? (

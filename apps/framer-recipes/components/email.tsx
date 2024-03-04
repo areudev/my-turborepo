@@ -17,7 +17,7 @@ const titles = [
 
 export default function Email() {
 	const [messages, setMessages] = useState(Array.from(Array(9).keys()))
-	const [selected, setSelected] = useState<Array<number>>([])
+	const [selected, setSelected] = useState<number[]>([])
 	console.log(selected)
 	function toggleMessage(mid: number) {
 		if (selected.includes(mid)) {

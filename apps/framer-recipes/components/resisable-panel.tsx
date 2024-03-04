@@ -1,10 +1,8 @@
 'use client'
 
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion'
-import { useState } from 'react'
+import { useState, createContext, useContext } from 'react'
 import { CheckIcon } from '@radix-ui/react-icons'
-import { createContext } from 'react'
-import { useContext } from 'react'
 import useMeasure from 'react-use-measure'
 
 const transition = { type: 'ease', ease: 'easeInOut', duration: 0.4 }
@@ -43,7 +41,7 @@ export function ResisablePanel() {
 											key="form"
 										>
 											<Form
-												onSubmit={async () => await delay(1000)}
+												onSubmit={async () => delay(1000)}
 												afterSave={() => setStatus('success')}
 												className="p-8"
 											>
@@ -91,6 +89,7 @@ export function ResisablePanel() {
 					</p>
 				</div>
 				<button
+					type="button"
 					onClick={() => setStatus('idle')}
 					className="mx-auto mt-8 rounded bg-indigo-500 px-4 py-2 text-white"
 				>
@@ -101,7 +100,7 @@ export function ResisablePanel() {
 	)
 }
 
-type FormContextType = {
+interface FormContextType {
 	status: string
 }
 
@@ -112,11 +111,11 @@ function Form({
 	afterSave,
 	children,
 	...props
-}: {
+}: React.HTMLProps<HTMLFormElement> & {
 	onSubmit: () => Promise<void>
 	afterSave: () => void
 	children: React.ReactNode
-} & React.HTMLProps<HTMLFormElement>) {
+}) {
 	const [status, setStatus] = useState<string>('idle')
 
 	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -141,10 +140,10 @@ Form.Button = function FormButton({
 	children,
 	className,
 	...rest
-}: {
+}: React.HTMLProps<HTMLButtonElement> & {
 	children: React.ReactNode
 	className: string
-} & React.HTMLProps<HTMLButtonElement>) {
+}) {
 	const { status } = useContext(formContext) || {}
 
 	const disabled = status !== 'idle'
@@ -192,13 +191,13 @@ Form.Button = function FormButton({
 function Spinner({
 	className,
 	...rest
-}: {
+}: React.HTMLProps<SVGSVGElement> & {
 	className?: string
-} & React.HTMLProps<SVGSVGElement>) {
+}) {
 	return (
 		<svg
 			viewBox="0 0 24 24"
-			className={`${className} h-full w-auto animate-spin`}
+			className={`${className ?? ''} h-full w-auto animate-spin`}
 			style={{
 				animationTimingFunction: 'steps(8, end)',
 				animationDuration: '.75s',
@@ -288,5 +287,7 @@ function Spinner({
 }
 
 async function delay(ms: number) {
-	await new Promise(resolve => setTimeout(resolve, ms))
+	await new Promise(resolve => {
+		setTimeout(resolve, ms)
+	})
 }
