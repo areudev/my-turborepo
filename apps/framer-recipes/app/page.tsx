@@ -1,15 +1,9 @@
-import { Steps } from '@/components/steps'
-// import { FluitCards } from '@/components/fluid-cards'
-import { Carousel } from '@/components/carousel'
-import Email from '@/components/email'
-import { FixedHeader } from '@/components/fixed-header'
-import { ResisablePanel } from '@/components/resisable-panel'
+import { CommandMenu } from '@/components/command-menu'
 
 export default function Home() {
 	return (
-		// <div className="flex h-screen items-center justify-center bg-black">
-		<div className="">
-			<ResisablePanel />
+		<div className="flex items-center justify-center">
+			<CommandMenu />
 		</div>
 	)
 }
