@@ -47,7 +47,7 @@ export function Calendar() {
 	})
 
 	return (
-		<MotionConfig transition={{ duration: 0.4 }}>
+		<MotionConfig transition={transition}>
 			<div className="flex min-h-screen items-start bg-stone-800 pt-16 text-stone-900">
 				<div className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl bg-white">
 					<div className="py-8">
@@ -135,6 +135,7 @@ export function Calendar() {
 	)
 }
 
+const transition = { type: 'spring', duration: 0.4 }
 const variants: Variants = {
 	enter: (direction: number) => ({ x: `${100 * direction}%`, opacity: 0 }),
 	middle: { x: '0%', opacity: 1 },
