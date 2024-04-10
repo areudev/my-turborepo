@@ -5,6 +5,7 @@ export function useDefault<T>(
 	defaultState: T,
 ): [T, (state: T | null) => void] {
 	const [state, setState] = useState<T | null>(initialState)
+
 	if (typeof state === 'undefined' || state === null)
 		return [defaultState, setState]
 
