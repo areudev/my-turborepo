@@ -1,11 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import DocumentTitle from './examples/document-title.tsx'
+import Example from './examples/default.tsx'
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
-		<DocumentTitle />
+		<Example />
 	</React.StrictMode>,
 )
