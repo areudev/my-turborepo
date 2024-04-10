@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import useDocumentTitle from '../lib/use-document-title'
+import { useDocumentTitle } from '../lib/use-document-title'
 
 export default function DocumentTitle() {
 	const [count, setCount] = useState(0)
