@@ -1,14 +1,10 @@
-import { useState } from 'react'
+import { useReducer } from 'react'
 
 export function useToggle(
-	initialState: boolean,
+	initialState: unknown,
 ): [boolean, (v: unknown) => void] {
-	const [state, setState] = useState(initialState)
-
-	const toggle = (v: unknown) =>
-		setState(prev =>
-			typeof v === 'boolean' ? v : typeof prev === 'boolean' ? !prev : prev,
-		)
-
-	return [state, toggle]
+	return useReducer(
+		(acc: boolean, curr: unknown) => (typeof curr === 'boolean' ? curr : !acc),
+		Boolean(initialState),
+	)
 }
