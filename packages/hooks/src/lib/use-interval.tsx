@@ -22,5 +22,8 @@ export function useInterval(cb: () => void, ms: number) {
 		return handleClearInterval
 	}, [ms, handleClearInterval])
 
-	return handleClearInterval
+	return () => {
+		handleClearInterval()
+		// id.current = setInterval(onInterval, ms)
+	}
 }
