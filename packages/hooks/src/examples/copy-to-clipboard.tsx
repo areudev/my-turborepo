@@ -1,5 +1,4 @@
 import { useCopyToClipboard } from '../lib/use-copy-to-clipboard'
-// import './copy.css'
 
 const randomHash = crypto.randomUUID()
 
