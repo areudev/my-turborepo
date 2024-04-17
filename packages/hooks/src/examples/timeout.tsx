@@ -48,7 +48,7 @@ export default function Timeout() {
 
 	const clear = useTimeout(() => {
 		setHasExploded(!hasExploded)
-	}, 1000)
+	}, 4000)
 
 	const handleClick = () => {
 		clear()
