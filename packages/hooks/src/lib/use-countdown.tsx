@@ -35,10 +35,13 @@ export function useCountdown(
 
 	useEffect(() => {
 		setCount(Math.round((endTime.getTime() - Date.now()) / options.interval))
+	}, [endTime, options.interval])
+
+	useEffect(() => {
 		id.current = setInterval(onTick, options.interval)
 
 		return handleClearInterval
-	}, [endTime, options.interval, handleClearInterval])
+	}, [options.interval, handleClearInterval])
 
 	return count
 }
