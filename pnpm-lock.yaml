@@ -356,6 +356,30 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
+  packages/state:
+    devDependencies:
+      '@repo/lint':
+        specifier: workspace:*
+        version: link:../../tooling/eslint-config
+      '@repo/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/typescript-config
+      '@turbo/gen':
+        specifier: ^1.10.12
+        version: 1.11.2(@types/node@20.10.4)(typescript@5.3.3)
+      '@types/eslint':
+        specifier: ^8.44.7
+        version: 8.44.9
+      '@types/node':
+        specifier: ^20.5.2
+        version: 20.10.4
+      eslint:
+        specifier: ^8.53.0
+        version: 8.57.0
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
   packages/ui:
     devDependencies:
       '@repo/lint':
@@ -2823,7 +2847,7 @@ packages:
       js-yaml: 4.1.0
       ora: 4.1.1
       rimraf: 3.0.2
-      semver: 7.5.4
+      semver: 7.6.0
       update-check: 1.5.4
     dev: true
 
@@ -4896,7 +4920,7 @@ packages:
       glob-parent: 6.0.2
       globals: 13.24.0
       graphemer: 1.4.0
-      ignore: 5.3.0
+      ignore: 5.3.1
       imurmurhash: 0.1.4
       is-glob: 4.0.3
       is-path-inside: 3.0.3
@@ -5304,7 +5328,7 @@ packages:
     dependencies:
       dir-glob: 3.0.1
       fast-glob: 3.3.2
-      ignore: 5.3.0
+      ignore: 5.3.1
       merge2: 1.4.1
       slash: 4.0.0
 
@@ -5437,7 +5461,6 @@ packages:
   /ignore@5.3.1:
     resolution: {integrity: sha512-5Fytz/IraMjqpwfd34ke28PTVMjZjJG2MPn5t7OE4eUCUNf8BAa7b5WUS9/Qvr6mwOQS7Mk6vdsMno5he+T8Xw==}
     engines: {node: '>= 4'}
-    dev: true
 
   /import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
