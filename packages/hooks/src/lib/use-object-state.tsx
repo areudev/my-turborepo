@@ -21,7 +21,14 @@ export function useObjectState<T extends Record<string, unknown>>(initial: T) {
 
 	const updateState = (newState: Partial<T> | ((state: T) => Partial<T>)) => {
 		setState(prevState => {
-			const nextState = isPlainObject(newState) ? newState : newState(prevState)
+			let nextState: Partial<T>
+			if (typeof newState === 'function') {
+				nextState = newState(prevState)
+			} else {
+				nextState = newState
+			}
+			nextState = isPlainObject(nextState) ? nextState : {}
+
 			return { ...prevState, ...nextState }
 		})
 	}
