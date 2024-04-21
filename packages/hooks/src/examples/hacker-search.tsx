@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useDebounce } from '../lib/use-debounce'
 
 const fetchData = async ({ query = '', page = 0, tag = '' }) => {
 	return fetch(
@@ -22,6 +23,7 @@ export default function HackerNewsSearch() {
 	const [resultsPerPage, setResultsPerPage] = useState(0)
 	const [totalPages, setTotalPages] = useState(50)
 	const [loading, setLoading] = useState(false)
+	const debounced = useDebounce(query, 500)
 
 	useEffect(() => {
 		let ignored = false
@@ -30,7 +32,7 @@ export default function HackerNewsSearch() {
 			setResults([])
 
 			const { results, pages, resultsPerPage } = await fetchData({
-				query,
+				query: debounced,
 				page,
 				tag,
 			})
@@ -45,7 +47,7 @@ export default function HackerNewsSearch() {
 		return () => {
 			ignored = true
 		}
-	}, [query, page, tag])
+	}, [debounced, page, tag])
 
 	const handleSearch = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -72,8 +74,20 @@ export default function HackerNewsSearch() {
 	return (
 		<section>
 			<h1>Hacker News Search</h1>
-			<form onSubmit={e => e.preventDefault()}>
-				<div>
+			<form
+				style={{
+					display: 'flex',
+					// flexDirection: '',
+					gap: 16,
+				}}
+				onSubmit={e => e.preventDefault()}
+			>
+				<div
+					style={{
+						display: 'flex',
+						gap: 8,
+					}}
+				>
 					<label htmlFor="query">Search</label>
 					<input
 						type="text"
@@ -84,7 +98,12 @@ export default function HackerNewsSearch() {
 						placeholder="Search Hacker News..."
 					/>
 				</div>
-				<div>
+				<div
+					style={{
+						display: 'flex',
+						gap: 8,
+					}}
+				>
 					<label htmlFor="tag">Tag</label>
 					<select id="tag" name="tag" onChange={handleTag} value={tag}>
 						<option value="story">Story</option>
@@ -125,8 +144,13 @@ export default function HackerNewsSearch() {
 							url || `https://news.ycombinator.com/item?id=${objectID}`
 
 						return (
-							<li key={null}>
-								<span>{page * resultsPerPage + (index + 1)}.</span>
+							<li
+								style={{
+									listStyleType: 'none',
+								}}
+								key={null}
+							>
+								<span>{page * resultsPerPage + (index + 1)}. </span>
 								<a href={href} target="_blank" rel="noreferrer">
 									{title}
 								</a>
