@@ -29,7 +29,7 @@ export default function HackerNewsSearch() {
 		let ignored = false
 		async function handleFetchData() {
 			setLoading(true)
-			setResults([])
+			// setResults([])
 
 			const { results, pages, resultsPerPage } = await fetchData({
 				query: debounced,
@@ -77,7 +77,6 @@ export default function HackerNewsSearch() {
 			<form
 				style={{
 					display: 'flex',
-					// flexDirection: '',
 					gap: 16,
 				}}
 				onSubmit={e => e.preventDefault()}
