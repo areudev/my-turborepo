@@ -16,7 +16,6 @@ export default function HistoryState() {
 			items: state.items.concat({ id: crypto.randomUUID(), name: val }),
 		})
 	}
-	// const addTodo = () => {}
 
 	const removeTodo = (id: string) => {
 		set({

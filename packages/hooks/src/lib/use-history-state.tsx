@@ -1,4 +1,4 @@
-import { useReducer } from 'react'
+import { useCallback, useReducer } from 'react'
 
 type State<T> = { past: T[]; present: T; future: T[] }
 
@@ -56,28 +56,28 @@ export function useHistoryState<T>(initialPresent = {} as T) {
 
 	const canUndo = state.past.length > 0
 	const canRedo = state.future.length > 0
-	const set = (value: T) => {
+	const set = useCallback((value: T) => {
 		dispatch({
 			type: 'SET',
 			newPresent: value,
 		})
-	}
-	const undo = () => {
+	}, [])
+	const undo = useCallback(() => {
 		dispatch({
 			type: 'UNDO',
 		})
-	}
-	const redo = () => {
+	}, [])
+	const redo = useCallback(() => {
 		dispatch({
 			type: 'REDO',
 		})
-	}
-	const clear = () => {
+	}, [])
+	const clear = useCallback(() => {
 		dispatch({
 			type: 'CLEAR',
 			initialPresent,
 		})
-	}
+	}, [initialPresent])
 
 	return {
 		state: state.present as typeof initialPresent,
