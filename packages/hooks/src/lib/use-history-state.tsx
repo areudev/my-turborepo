@@ -63,15 +63,17 @@ export function useHistoryState<T>(initialPresent = {} as T) {
 		})
 	}, [])
 	const undo = useCallback(() => {
+		if (!canUndo) return
 		dispatch({
 			type: 'UNDO',
 		})
-	}, [])
+	}, [canUndo])
 	const redo = useCallback(() => {
+		if (!canRedo) return
 		dispatch({
 			type: 'REDO',
 		})
-	}, [])
+	}, [canRedo])
 	const clear = useCallback(() => {
 		dispatch({
 			type: 'CLEAR',
