@@ -1,3 +1,5 @@
+import './switch.css'
+
 export function Switch({
 	on,
 	className = '',
