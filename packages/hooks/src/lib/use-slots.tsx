@@ -4,9 +4,14 @@ import { createContext, use } from 'react'
 type Slots = Record<string, Record<string, unknown>>
 export const SlotContext = createContext<Slots>({})
 
-export function useSlotProps<Props>(props: Props, slot: string): Props {
+export function useSlotProps<Props>(
+	props: Props & { slot?: string },
+	defaultSlot?: string,
+): Props {
+	const slot = props.slot ?? defaultSlot
+	if (!slot) return props
+
 	const slots = use(SlotContext)
-	// const slotProps = slots[slot] || {}
-	// return { ...props, ...slotProps } as Props
+	console.log(slots)
 	return { ...slots[slot], slot, ...props } as Props
 }

@@ -1,5 +1,5 @@
-import { Input, Label, TextField } from './text-field'
-import { Toggle, ToggleButton, ToggleOff, ToggleOn } from './toggle'
+import { Input, Label, Switch, TextField, Text } from './slot-components'
+import { Toggle } from './toggle'
 
 export default function SlotsExample() {
 	return (
@@ -7,9 +7,9 @@ export default function SlotsExample() {
 			<div>
 				<Toggle>
 					<Label>Party mode</Label>
-					<ToggleButton />
-					<ToggleOn>Let's party 🥳</ToggleOn>
-					<ToggleOff>Sad town 😭</ToggleOff>
+					<Switch />
+					<Text slot="onText">Let's party 🥳</Text>
+					<Text slot="offText">Sad town 😭</Text>
 				</Toggle>
 			</div>
 			<hr />
@@ -19,6 +19,7 @@ export default function SlotsExample() {
 					<Input />
 				</TextField>
 			</div>
+			<Label htmlFor="yo">what</Label>
 		</div>
 	)
 }
