@@ -17,7 +17,7 @@ type MyComboboxType<T> = Pick<
 	items: T[]
 }
 
-const ComboboxContext = createContext<MyComboboxType<unknown> | null>(null)
+const ComboboxContext = createContext<MyComboboxType<any> | null>(null)
 
 export function ComboboxProvider<T>({
 	children,
@@ -68,7 +68,6 @@ export function useComboboxContext<T>() {
 	if (context === null) {
 		throw new Error('useComboboxContext must be used within a ComboboxProvider')
 	}
-
 	return context
 }
 
@@ -109,21 +108,21 @@ export function ComboboxToggleButton() {
 	)
 }
 
-export function ComboboxMenu({
+export function ComboboxMenu<T>({
 	renderItem,
 }: {
-	renderItem: (item: unknown) => React.ReactNode
+	renderItem: (item: T) => React.ReactNode
 }) {
-	const { getMenuProps, getItemProps, items, isOpen } =
-		useComboboxContext<unknown>()
+	const { getMenuProps, getItemProps, items, isOpen } = useComboboxContext<T>()
 
 	if (!isOpen) {
 		return null
 	}
+
 	return (
-		<ul className="bg-white shadow-sm" {...getMenuProps()}>
+		<ul {...getMenuProps()}>
 			{items.map((item, index) => (
-				<li key={index} className="p-1" {...getItemProps({ item, index })}>
+				<li key={index} {...getItemProps({ item, index })}>
 					{renderItem(item)}
 				</li>
 			))}
@@ -134,7 +133,7 @@ export function ComboboxMenu({
 export function Combooo() {
 	return (
 		<>
-			<ComboboxProvider<Book>
+			<ComboboxProvider
 				filterFn={(item, inputValue) =>
 					!inputValue ||
 					item.title.toLowerCase().includes(inputValue.toLowerCase()) ||
@@ -147,8 +146,8 @@ export function Combooo() {
 					<ComboboxInput />
 					<ComboboxToggleButton />
 				</div>
-				<ComboboxMenu
-					renderItem={(item: Book) => (
+				<ComboboxMenu<Book>
+					renderItem={item => (
 						<>
 							<p>{item.title}</p>
 							<p>{item.author}</p>
