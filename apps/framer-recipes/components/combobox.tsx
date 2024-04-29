@@ -14,7 +14,7 @@ type MyComboboxType = Pick<
 	| 'isOpen'
 	| 'selectedItem'
 > & {
-	items: Book[]
+	items: unknown[]
 }
 
 const ComboboxContext = createContext<MyComboboxType | null>(null)
@@ -22,13 +22,13 @@ const ComboboxContext = createContext<MyComboboxType | null>(null)
 export function ComboboxProvider<T extends unknown[]>({
 	children,
 	initialItems,
-	filterFn = getBooksFilter,
+	filterFn,
 }: {
 	children: React.ReactNode
 	initialItems: T
-	filterFn: (inputValue: string) => boolean
+	filterFn: (item: T[number], inputValue: string) => boolean
 }) {
-	const [items, setItems] = useState(initialItems)
+	const [items, setItems] = useState<T>(initialItems)
 	const {
 		isOpen,
 		getToggleButtonProps,
@@ -41,12 +41,9 @@ export function ComboboxProvider<T extends unknown[]>({
 	} = useCombobox({
 		onInputValueChange({ inputValue }) {
 			// setItems(initialItems.filter(getBooksFilter(inputValue)))
-			setItems(initialItems.filter(filterFn(inputValue)))
+			setItems(initialItems.filter(item => filterFn(item, inputValue)))
 		},
 		items,
-		itemToString(item) {
-			return item ? item.title : ''
-		},
 	})
 	const value = {
 		isOpen,
@@ -133,7 +130,14 @@ export function ComboboxMenu() {
 export function Combooo() {
 	return (
 		<>
-			<ComboboxProvider initialItems={books}>
+			<ComboboxProvider
+				filterFn={(item: Book, inputValue: string) =>
+					!inputValue ||
+					item.title.toLowerCase().includes(inputValue.toLowerCase()) ||
+					item.author.toLowerCase().includes(inputValue.toLowerCase())
+				}
+				initialItems={books}
+			>
 				<ComboboxLabel>Choose your favorite book:</ComboboxLabel>
 				<div className="flex gap-0.5 bg-white shadow-sm">
 					<ComboboxInput />
