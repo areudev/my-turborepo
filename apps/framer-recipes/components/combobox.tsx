@@ -1,10 +1,10 @@
-import { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 import type { UseComboboxReturnValue } from 'downshift'
 import { useCombobox } from 'downshift'
-import { Book, books, getBooksFilter } from './combobox-ex'
+import { Book, books } from './combobox-ex'
 
-type MyComboboxType = Pick<
-	UseComboboxReturnValue<unknown>,
+type MyComboboxType<T> = Pick<
+	UseComboboxReturnValue<T>,
 	| 'getInputProps'
 	| 'getItemProps'
 	| 'getLabelProps'
@@ -14,21 +14,21 @@ type MyComboboxType = Pick<
 	| 'isOpen'
 	| 'selectedItem'
 > & {
-	items: unknown[]
+	items: T[]
 }
 
-const ComboboxContext = createContext<MyComboboxType | null>(null)
+const ComboboxContext = createContext<MyComboboxType<unknown> | null>(null)
 
-export function ComboboxProvider<T extends unknown[]>({
+export function ComboboxProvider<T>({
 	children,
 	initialItems,
 	filterFn,
 }: {
 	children: React.ReactNode
-	initialItems: T
-	filterFn: (item: T[number], inputValue: string) => boolean
+	initialItems: T[]
+	filterFn: (item: T, inputValue: string) => boolean
 }) {
-	const [items, setItems] = useState<T>(initialItems)
+	const [items, setItems] = useState<T[]>(initialItems)
 	const {
 		isOpen,
 		getToggleButtonProps,
@@ -38,14 +38,13 @@ export function ComboboxProvider<T extends unknown[]>({
 		highlightedIndex,
 		getItemProps,
 		selectedItem,
-	} = useCombobox({
+	} = useCombobox<T>({
 		onInputValueChange({ inputValue }) {
-			// setItems(initialItems.filter(getBooksFilter(inputValue)))
 			setItems(initialItems.filter(item => filterFn(item, inputValue)))
 		},
 		items,
 	})
-	const value = {
+	const value: MyComboboxType<T> = {
 		isOpen,
 		getToggleButtonProps,
 		getLabelProps,
@@ -55,7 +54,7 @@ export function ComboboxProvider<T extends unknown[]>({
 		getItemProps,
 		selectedItem,
 		items,
-	} satisfies MyComboboxType
+	}
 
 	return (
 		<ComboboxContext.Provider value={value}>
@@ -64,8 +63,8 @@ export function ComboboxProvider<T extends unknown[]>({
 	)
 }
 
-export function useComboboxContext() {
-	const context = useContext(ComboboxContext)
+export function useComboboxContext<T>() {
+	const context = useContext(ComboboxContext) as MyComboboxType<T> | null
 	if (context === null) {
 		throw new Error('useComboboxContext must be used within a ComboboxProvider')
 	}
@@ -74,7 +73,7 @@ export function useComboboxContext() {
 }
 
 export function ComboboxLabel({ children }: { children: React.ReactNode }) {
-	const { getLabelProps } = useComboboxContext()
+	const { getLabelProps } = useComboboxContext<unknown>()
 
 	return (
 		<label className="w-fit" {...getLabelProps()}>
@@ -84,7 +83,7 @@ export function ComboboxLabel({ children }: { children: React.ReactNode }) {
 }
 
 export function ComboboxInput() {
-	const { getInputProps } = useComboboxContext()
+	const { getInputProps } = useComboboxContext<unknown>()
 
 	return (
 		<input
@@ -96,7 +95,7 @@ export function ComboboxInput() {
 }
 
 export function ComboboxToggleButton() {
-	const { getToggleButtonProps, isOpen } = useComboboxContext()
+	const { getToggleButtonProps, isOpen } = useComboboxContext<unknown>()
 
 	return (
 		<button
@@ -110,8 +109,13 @@ export function ComboboxToggleButton() {
 	)
 }
 
-export function ComboboxMenu() {
-	const { getMenuProps, getItemProps, items, isOpen } = useComboboxContext()
+export function ComboboxMenu({
+	renderItem,
+}: {
+	renderItem: (item: unknown) => React.ReactNode
+}) {
+	const { getMenuProps, getItemProps, items, isOpen } =
+		useComboboxContext<unknown>()
 
 	if (!isOpen) {
 		return null
@@ -119,8 +123,8 @@ export function ComboboxMenu() {
 	return (
 		<ul className="bg-white shadow-sm" {...getMenuProps()}>
 			{items.map((item, index) => (
-				<li key={item.id} className="p-1" {...getItemProps({ item, index })}>
-					{item.title}
+				<li key={index} className="p-1" {...getItemProps({ item, index })}>
+					{renderItem(item)}
 				</li>
 			))}
 		</ul>
@@ -130,8 +134,8 @@ export function ComboboxMenu() {
 export function Combooo() {
 	return (
 		<>
-			<ComboboxProvider
-				filterFn={(item: Book, inputValue: string) =>
+			<ComboboxProvider<Book>
+				filterFn={(item, inputValue) =>
 					!inputValue ||
 					item.title.toLowerCase().includes(inputValue.toLowerCase()) ||
 					item.author.toLowerCase().includes(inputValue.toLowerCase())
@@ -143,7 +147,14 @@ export function Combooo() {
 					<ComboboxInput />
 					<ComboboxToggleButton />
 				</div>
-				<ComboboxMenu />
+				<ComboboxMenu
+					renderItem={(item: Book) => (
+						<>
+							<p>{item.title}</p>
+							<p>{item.author}</p>
+						</>
+					)}
+				/>
 			</ComboboxProvider>
 			<p>hello</p>
 		</>
