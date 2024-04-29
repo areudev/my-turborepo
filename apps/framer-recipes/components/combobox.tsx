@@ -19,8 +19,16 @@ type MyComboboxType = Pick<
 
 const ComboboxContext = createContext<MyComboboxType | null>(null)
 
-export function ComboboxProvider({ children }: { children: React.ReactNode }) {
-	const [items, setItems] = useState(books)
+export function ComboboxProvider<T extends unknown[]>({
+	children,
+	initialItems,
+	filterFn = getBooksFilter,
+}: {
+	children: React.ReactNode
+	initialItems: T
+	filterFn: (inputValue: string) => boolean
+}) {
+	const [items, setItems] = useState(initialItems)
 	const {
 		isOpen,
 		getToggleButtonProps,
@@ -32,7 +40,8 @@ export function ComboboxProvider({ children }: { children: React.ReactNode }) {
 		selectedItem,
 	} = useCombobox({
 		onInputValueChange({ inputValue }) {
-			setItems(books.filter(getBooksFilter(inputValue)))
+			// setItems(initialItems.filter(getBooksFilter(inputValue)))
+			setItems(initialItems.filter(filterFn(inputValue)))
 		},
 		items,
 		itemToString(item) {
@@ -124,7 +133,7 @@ export function ComboboxMenu() {
 export function Combooo() {
 	return (
 		<>
-			<ComboboxProvider>
+			<ComboboxProvider initialItems={books}>
 				<ComboboxLabel>Choose your favorite book:</ComboboxLabel>
 				<div className="flex gap-0.5 bg-white shadow-sm">
 					<ComboboxInput />
