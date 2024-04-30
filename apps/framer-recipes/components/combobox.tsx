@@ -93,7 +93,9 @@ export function ComboboxInput() {
 	)
 }
 
-export function ComboboxToggleButton() {
+export function ComboboxToggleButton({
+	...props
+}: React.ComponentProps<'button'>) {
 	const { getToggleButtonProps, isOpen } = useComboboxContext<unknown>()
 
 	return (
@@ -101,7 +103,9 @@ export function ComboboxToggleButton() {
 			aria-label="toggle menu"
 			className="px-2"
 			type="button"
-			{...getToggleButtonProps()}
+			{...getToggleButtonProps({
+				...props,
+			})}
 		>
 			{isOpen ? <>&#8593;</> : <>&#8595;</>}
 		</button>
@@ -113,7 +117,8 @@ export function ComboboxMenu<T>({
 }: {
 	renderItem: (item: T) => React.ReactNode
 }) {
-	const { getMenuProps, getItemProps, items, isOpen } = useComboboxContext<T>()
+	const { getMenuProps, getItemProps, items, isOpen, highlightedIndex } =
+		useComboboxContext<T>()
 
 	if (!isOpen) {
 		return null
@@ -121,11 +126,20 @@ export function ComboboxMenu<T>({
 
 	return (
 		<ul {...getMenuProps()}>
-			{items.map((item, index) => (
-				<li key={index} {...getItemProps({ item, index })}>
-					{renderItem(item)}
-				</li>
-			))}
+			{items.map((item, index) => {
+				const isHighlighted = highlightedIndex === index
+				return (
+					<li
+						key={index}
+						{...getItemProps({ item, index })}
+						style={{
+							backgroundColor: isHighlighted ? 'lightgray' : 'white',
+						}}
+					>
+						{renderItem(item)}
+					</li>
+				)
+			})}
 		</ul>
 	)
 }

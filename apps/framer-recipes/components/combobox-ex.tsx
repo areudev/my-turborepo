@@ -102,6 +102,7 @@ export function ComboboxExample() {
 								{...getItemProps({ item, index })}
 							>
 								<span>{item.title}</span>
+								<span>{item.author}</span>
 								<span className="text-sm text-gray-700">{item.author}</span>
 							</li>
 						))
