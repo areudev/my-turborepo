@@ -1,4 +1,6 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable @typescript-eslint/consistent-type-definitions */
+// eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable jsx-a11y/label-has-associated-control */
 'use client'
 import { useState } from 'react'
