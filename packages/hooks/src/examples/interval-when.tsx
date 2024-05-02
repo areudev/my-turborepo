@@ -23,7 +23,6 @@ export default function IntervalWhen() {
 				})}
 				<span className="btn link">{when ? 'stop' : 'start'}</span>
 			</button>
-			{/* <button onClick={() => clear()}></button> */}
 		</section>
 	)
 }
