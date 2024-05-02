@@ -12,6 +12,5 @@ export function useSlotProps<Props>(
 	if (!slot) return props
 
 	const slots = use(SlotContext)
-	console.log(slots)
 	return { ...slots[slot], slot, ...props } as Props
 }
