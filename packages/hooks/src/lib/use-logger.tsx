@@ -7,7 +7,7 @@ import {
 export function useLogger(name: string, rest: unknown) {
 	const initialRef = useRef(true)
 	const handleLog = useEffectEvent((event: string) => {
-		console.log(`${name} ${event} ${rest}`)
+		console.log(`${name} ${event}`, rest)
 	})
 
 	useEffect(() => {
