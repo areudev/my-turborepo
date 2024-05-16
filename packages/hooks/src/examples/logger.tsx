@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useLogger } from '../lib/use-logger'
 import './logger.css'
 
-function FirstChild(props) {
+function FirstChild(props: { name: string; isActive: boolean; count: number }) {
 	useLogger(props.name, props)
 
 	return (
