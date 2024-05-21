@@ -4,15 +4,19 @@ import { useKeyPress } from '../lib/use-key-press'
 export default function App() {
 	const [activeKey, setActiveKey] = React.useState('')
 
-	const handleKeyPress = e => {
+	const handleKeyPress = (e: Event) => {
 		e.preventDefault()
-		setActiveKey(e.key)
-		setTimeout(() => {
-			setActiveKey('')
-		}, 600)
+		if (e instanceof KeyboardEvent && !e.repeat) {
+			setActiveKey(e.key)
+			setTimeout(() => {
+				setActiveKey('')
+			}, 600)
+		}
 	}
 
-	useKeyPress('ArrowRight', handleKeyPress)
+	useKeyPress('ArrowRight', handleKeyPress, {
+		event: 'keyup',
+	})
 	useKeyPress('ArrowLeft', handleKeyPress)
 	useKeyPress('ArrowUp', handleKeyPress)
 	useKeyPress('ArrowDown', handleKeyPress)
