@@ -11,6 +11,7 @@ module.exports = {
 			files: ['*.ts', '*.tsx'],
 			rules: {
 				'react/jsx-sort-props': 'off',
+				'@typescript-eslint/no-empty-interface': 'off',
 			},
 		},
 	],
