@@ -65,6 +65,19 @@ const CommandList = React.forwardRef<
 		{...props}
 	/>
 ))
+function CommandListDialoged({ ...props }: CommandDialogProps) {
+	return (
+		<Dialog {...props}>
+			<DialogContent className="overflow-hidden p-0">
+				<CommandPrimitive.List
+					className={cn('max-h-[300px] overflow-y-auto overflow-x-hidden')}
+				/>
+			</DialogContent>
+		</Dialog>
+	)
+}
+
+CommandListDialoged.displayName = CommandPrimitive.List.displayName
 
 CommandList.displayName = CommandPrimitive.List.displayName
 

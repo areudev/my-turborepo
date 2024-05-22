@@ -13,6 +13,7 @@ module.exports = {
 				'react/jsx-sort-props': 'off',
 				'@typescript-eslint/no-empty-interface': 'off',
 				'react/button-has-type': 'off',
+				'@typescript-eslint/no-shadow': 'off',
 			},
 		},
 	],
