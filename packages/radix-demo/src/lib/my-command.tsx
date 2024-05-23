@@ -70,7 +70,7 @@ function Command({
 		<CommandPrimitive
 			ref={ref}
 			className={cn(
-				'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
+				'relative flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
 				className,
 			)}
 			{...props}
@@ -118,7 +118,7 @@ const CommandList = React.forwardRef<
 		<CommandPrimitive.List
 			ref={ref}
 			className={cn(
-				'max-h-[300px] overflow-y-auto overflow-x-hidden border',
+				'top-10 max-h-[300px] overflow-y-auto overflow-x-hidden border ',
 				className,
 			)}
 			{...props}

@@ -26,7 +26,7 @@ export function CommandDemo() {
 	// useEventListener('touchstart', handleClick)
 
 	return (
-		<div className="flex w-96 items-center justify-center">
+		<div className="flex w-96 flex-col items-center justify-center gap-2">
 			{/* <Command ref={ref}> */}
 			<CommandProvider>
 				<Command>
@@ -63,6 +63,9 @@ export function CommandDemo() {
 					{/* ) : null} */}
 				</Command>
 			</CommandProvider>
+			<div>
+				<p>Selected: {value}</p>
+			</div>
 		</div>
 	)
 }
