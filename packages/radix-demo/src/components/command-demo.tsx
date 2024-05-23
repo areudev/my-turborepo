@@ -12,39 +12,12 @@ import {
 
 export function CommandDemo() {
 	const [value, setValue] = useState('')
-	const ref = useRef<HTMLInputElement | null>(null)
-	const whatref = useRef<HTMLDivElement | null>(null)
-
-	useEffect(() => {
-		const element = whatref.current
-		if (!element) return
-		element.onmouseleave = () => {
-			console.log('you left the container')
-		}
-	}, [])
-
-	useEffect(() => {
-		const element = ref.current
-		if (!element) return
-		element.onmouseleave = () => {
-			console.log('you left the input')
-		}
-	}, [])
 
 	return (
 		<div className="flex w-96 flex-col items-center justify-center gap-2">
-			{/* <Command ref={ref}> */}
 			<CommandProvider>
-				<Command
-					filter={(value, search) => {
-						console.log('filtering', value, search)
-						if (value.includes(search)) return 1
-						return 0
-					}}
-					ref={whatref}
-				>
+				<Command>
 					<CommandInput
-						ref={ref}
 						onClick={() => {
 							console.log('you clicked by i closed :(')
 						}}
@@ -52,17 +25,15 @@ export function CommandDemo() {
 						onValueChange={setValue}
 						placeholder="Type a command or search..."
 					/>
-					{/* {open ? ( */}
 					<CommandList>
 						<CommandEmpty>No results found.</CommandEmpty>
 						<CommandGroup heading="books">
 							{books.map(book => (
 								<CommandItem
-									value={`${book.title} ${book.author} ${book.id}`}
-									onSelect={() => {
+									value={`${book.title}`}
+									onSelect={current => {
 										console.log('selected', book.title)
-										// setOpen(false)
-										setValue(book.author)
+										setValue(book.title)
 									}}
 									key={book.id}
 								>
@@ -71,7 +42,6 @@ export function CommandDemo() {
 							))}
 						</CommandGroup>
 					</CommandList>
-					{/* ) : null} */}
 				</Command>
 			</CommandProvider>
 			<div>
