@@ -9,7 +9,8 @@ import {
 } from '../lib/command'
 
 export function CommandMenu() {
-	const [open, setOpen] = useState(false)
+	const [open, setOpen] = useState(true)
+	const [value, setValue] = useState('')
 
 	useEffect(() => {
 		const down = (e: KeyboardEvent) => {
@@ -28,7 +29,13 @@ export function CommandMenu() {
 			<CommandList>
 				<CommandEmpty>No results found.</CommandEmpty>
 				<CommandGroup heading="Suggestions">
-					<CommandItem>Calendar</CommandItem>
+					<CommandItem
+						onSelect={value => {
+							console.log(value)
+						}}
+					>
+						Calendar
+					</CommandItem>
 					<CommandItem>Search Emoji</CommandItem>
 					<CommandItem>Calculator</CommandItem>
 				</CommandGroup>

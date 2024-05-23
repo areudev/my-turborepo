@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import {
 	Command,
 	CommandEmpty,
@@ -6,36 +6,42 @@ import {
 	CommandInput,
 	CommandItem,
 	CommandList,
+	CommandProvider,
 } from '../lib/my-command'
-import { useEventListener } from '../hooks/event'
+// import { useEventListener } from '../hooks/event'
 
 export function CommandDemo() {
-	const [open, setOpen] = useState(false)
+	// const [open, setOpen] = useState(false)
 	const [value, setValue] = useState('')
-	const ref = useRef<HTMLDivElement | null>(null)
+	// const ref = useRef<HTMLDivElement | null>(null)
 
-	const handleClick = (e: MouseEvent | TouchEvent) => {
-		const element = ref.current
-		if (!element || element.contains(e.target as Node)) return
-		if (open) {
-			setOpen(false)
-		}
-	}
-	useEventListener('mousedown', handleClick)
-	useEventListener('touchstart', handleClick)
+	// const handleClick = (e: MouseEvent | TouchEvent) => {
+	// 	const element = ref.current
+	// 	if (!element || element.contains(e.target as Node)) return
+	// 	if (open) {
+	// 		setOpen(false)
+	// 	}
+	// }
+	// useEventListener('mousedown', handleClick)
+	// useEventListener('touchstart', handleClick)
 
 	return (
 		<div className="flex w-96 items-center justify-center">
-			<Command ref={ref}>
-				<CommandInput
-					onClick={() => {
-						if (!open) setOpen(open => !open)
-					}}
-					value={value}
-					onValueChange={setValue}
-					placeholder="Type a command or search..."
-				/>
-				{open ? (
+			{/* <Command ref={ref}> */}
+			<CommandProvider>
+				<Command>
+					<CommandInput
+						// onClick={() => {
+						// 	if (!open) setOpen(open => !open)
+						// }}
+						onClick={() => {
+							console.log('you clicked by i closed :(')
+						}}
+						value={value}
+						onValueChange={setValue}
+						placeholder="Type a command or search..."
+					/>
+					{/* {open ? ( */}
 					<CommandList>
 						<CommandEmpty>No results found.</CommandEmpty>
 						<CommandGroup heading="books">
@@ -54,8 +60,9 @@ export function CommandDemo() {
 							))}
 						</CommandGroup>
 					</CommandList>
-				) : null}
-			</Command>
+					{/* ) : null} */}
+				</Command>
+			</CommandProvider>
 		</div>
 	)
 }

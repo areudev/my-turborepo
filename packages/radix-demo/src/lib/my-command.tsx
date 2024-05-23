@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { Command as CommandPrimitive } from 'cmdk'
 import { cn } from '../utils/misc'
+import { useEventListener } from '../hooks/event'
+import { callAll } from '../utils/call-all'
 
 type CommandContextValue = {
 	open: boolean
@@ -36,53 +38,93 @@ const useCommandContext = () => {
 	}
 	return value
 }
-const Command = React.forwardRef<
-	React.ElementRef<typeof CommandPrimitive>,
-	React.ComponentPropsWithoutRef<typeof CommandPrimitive>
->(({ className, ...props }, ref) => (
-	<CommandPrimitive
-		ref={ref}
-		className={cn(
-			'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
-			className,
-		)}
-		{...props}
-	/>
-))
+// const Command = React.forwardRef<
+// 	React.ElementRef<typeof CommandPrimitive>,
+// 	React.ComponentPropsWithoutRef<typeof CommandPrimitive>
+// >(({ className, ...props }, ref) => (
+// 	<CommandPrimitive
+// 		ref={ref}
+// 		className={cn(
+// 			'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
+// 			className,
+// 		)}
+// 		{...props}
+// 	/>
+// ))
+function Command({
+	className,
+	...props
+}: React.ComponentPropsWithoutRef<typeof CommandPrimitive>) {
+	const { open, closeList } = useCommandContext()
+	const ref = React.useRef<HTMLDivElement | null>(null)
+	const handleClick = (e: MouseEvent | TouchEvent) => {
+		const element = ref.current
+		if (!element || element.contains(e.target as Node)) return
+		if (open) {
+			closeList()
+		}
+	}
+	useEventListener('mousedown', handleClick)
+	useEventListener('touchstart', handleClick)
+	return (
+		<CommandPrimitive
+			ref={ref}
+			className={cn(
+				'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
+				className,
+			)}
+			{...props}
+		/>
+	)
+}
 Command.displayName = CommandPrimitive.displayName
 
 const CommandInput = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive.Input>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
->(({ className, ...props }, ref) => (
-	<div className="flex items-center border px-3" cmdk-input-wrapper="">
-		<p className="mr-2 h-5 w-4 shrink-0 opacity-50">🔎</p>
-		<CommandPrimitive.Input
-			ref={ref}
-			className={cn(
-				'flex h-10 w-full rounded-md  bg-transparent py-3 text-sm outline-none placeholder:text-slate-500 disabled:cursor-not-allowed disabled:opacity-50',
-				className,
-			)}
-			{...props}
-		/>
-	</div>
-))
+>(({ className, onClick, onValueChange, ...props }, ref) => {
+	const { openList } = useCommandContext()
+	onValueChange = callAll(onValueChange, openList)
+	onClick = callAll(onClick, openList)
+	return (
+		<div className="flex items-center border px-3" cmdk-input-wrapper="">
+			<p className="mr-2 h-5 w-4 shrink-0 opacity-50">🔎</p>
+			<CommandPrimitive.Input
+				ref={ref}
+				className={cn(
+					'flex h-10 w-full rounded-md  bg-transparent py-3 text-sm outline-none placeholder:text-slate-500 disabled:cursor-not-allowed disabled:opacity-50',
+					className,
+				)}
+				{...props}
+				onClick={onClick}
+				onValueChange={onValueChange}
+			/>
+		</div>
+	)
+})
 
 CommandInput.displayName = CommandPrimitive.Input.displayName
 
 const CommandList = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive.List>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive.List>
->(({ className, ...props }, ref) => (
-	<CommandPrimitive.List
-		ref={ref}
-		className={cn(
-			'max-h-[300px] overflow-y-auto overflow-x-hidden border',
-			className,
-		)}
-		{...props}
-	/>
-))
+>(({ className, ...props }, ref) => {
+	const { open } = useCommandContext()
+
+	if (!open) {
+		return null
+	}
+	return (
+		<CommandPrimitive.List
+			ref={ref}
+			className={cn(
+				'max-h-[300px] overflow-y-auto overflow-x-hidden border',
+				className,
+			)}
+			{...props}
+		/>
+	)
+})
 
 CommandList.displayName = CommandPrimitive.List.displayName
 
@@ -130,16 +172,22 @@ CommandSeparator.displayName = CommandPrimitive.Separator.displayName
 const CommandItem = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive.Item>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
->(({ className, ...props }, ref) => (
-	<CommandPrimitive.Item
-		ref={ref}
-		className={cn(
-			'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-blue-200 aria-selected:text-blue-800 data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',
-			className,
-		)}
-		{...props}
-	/>
-))
+>(({ className, onSelect, ...props }, ref) => {
+	const { closeList } = useCommandContext()
+	onSelect = callAll(onSelect, closeList)
+
+	return (
+		<CommandPrimitive.Item
+			ref={ref}
+			className={cn(
+				'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-blue-200 aria-selected:text-blue-800 data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',
+				className,
+			)}
+			{...props}
+			onSelect={onSelect}
+		/>
+	)
+})
 
 CommandItem.displayName = CommandPrimitive.Item.displayName
 
@@ -161,6 +209,7 @@ CommandShortcut.displayName = 'CommandShortcut'
 
 export {
 	Command,
+	CommandProvider,
 	CommandInput,
 	CommandList,
 	CommandEmpty,
