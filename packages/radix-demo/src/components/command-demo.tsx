@@ -1,39 +1,50 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
 	Command,
 	CommandEmpty,
 	CommandGroup,
 	CommandInput,
+	// CommandInput,
 	CommandItem,
 	CommandList,
 	CommandProvider,
 } from '../lib/my-command'
-// import { useEventListener } from '../hooks/event'
 
 export function CommandDemo() {
-	// const [open, setOpen] = useState(false)
 	const [value, setValue] = useState('')
-	// const ref = useRef<HTMLDivElement | null>(null)
+	const ref = useRef<HTMLInputElement | null>(null)
+	const whatref = useRef<HTMLDivElement | null>(null)
 
-	// const handleClick = (e: MouseEvent | TouchEvent) => {
-	// 	const element = ref.current
-	// 	if (!element || element.contains(e.target as Node)) return
-	// 	if (open) {
-	// 		setOpen(false)
-	// 	}
-	// }
-	// useEventListener('mousedown', handleClick)
-	// useEventListener('touchstart', handleClick)
+	useEffect(() => {
+		const element = whatref.current
+		if (!element) return
+		element.onmouseleave = () => {
+			console.log('you left the container')
+		}
+	}, [])
+
+	useEffect(() => {
+		const element = ref.current
+		if (!element) return
+		element.onmouseleave = () => {
+			console.log('you left the input')
+		}
+	}, [])
 
 	return (
 		<div className="flex w-96 flex-col items-center justify-center gap-2">
 			{/* <Command ref={ref}> */}
 			<CommandProvider>
-				<Command>
+				<Command
+					filter={(value, search) => {
+						console.log('filtering', value, search)
+						if (value.includes(search)) return 1
+						return 0
+					}}
+					ref={whatref}
+				>
 					<CommandInput
-						// onClick={() => {
-						// 	if (!open) setOpen(open => !open)
-						// }}
+						ref={ref}
 						onClick={() => {
 							console.log('you clicked by i closed :(')
 						}}
@@ -47,11 +58,11 @@ export function CommandDemo() {
 						<CommandGroup heading="books">
 							{books.map(book => (
 								<CommandItem
-									value={book.title}
+									value={`${book.title} ${book.author} ${book.id}`}
 									onSelect={() => {
 										console.log('selected', book.title)
 										// setOpen(false)
-										setValue(book.title)
+										setValue(book.author)
 									}}
 									key={book.id}
 								>

@@ -9,6 +9,7 @@ type CommandContextValue = {
 	openList: () => void
 	closeList: () => void
 	toggleList: () => void
+	inputRef: React.RefObject<HTMLInputElement>
 }
 const CommandContext = React.createContext<CommandContextValue | undefined>(
 	undefined,
@@ -23,9 +24,11 @@ function CommandProvider({ children }: CommandProviderProps) {
 	const openList = React.useCallback(() => setOpen(true), [])
 	const closeList = React.useCallback(() => setOpen(false), [])
 	const toggleList = React.useCallback(() => setOpen(open => !open), [])
-
+	const inputRef = React.useRef<HTMLInputElement>(null)
 	return (
-		<CommandContext.Provider value={{ open, openList, closeList, toggleList }}>
+		<CommandContext.Provider
+			value={{ open, openList, closeList, toggleList, inputRef }}
+		>
 			{children}
 		</CommandContext.Provider>
 	)
@@ -38,59 +41,72 @@ const useCommandContext = () => {
 	}
 	return value
 }
-// const Command = React.forwardRef<
-// 	React.ElementRef<typeof CommandPrimitive>,
-// 	React.ComponentPropsWithoutRef<typeof CommandPrimitive>
-// >(({ className, ...props }, ref) => (
-// 	<CommandPrimitive
-// 		ref={ref}
-// 		className={cn(
-// 			'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
-// 			className,
-// 		)}
-// 		{...props}
-// 	/>
-// ))
-function Command({
-	className,
-	...props
-}: React.ComponentPropsWithoutRef<typeof CommandPrimitive>) {
+const Command = React.forwardRef<
+	React.ElementRef<typeof CommandPrimitive>,
+	React.ComponentPropsWithoutRef<typeof CommandPrimitive>
+>(({ className, ...props }, ref) => {
 	const { open, closeList } = useCommandContext()
-	const ref = React.useRef<HTMLDivElement | null>(null)
+	const commandRef = React.useRef<HTMLDivElement | null>(null)
+
 	const handleClick = (e: MouseEvent | TouchEvent) => {
-		const element = ref.current
+		const element = commandRef.current
 		if (!element || element.contains(e.target as Node)) return
 		if (open) {
 			closeList()
 		}
 	}
+
 	useEventListener('mousedown', handleClick)
 	useEventListener('touchstart', handleClick)
+
+	const setBothRefs = (el: HTMLDivElement | null) => {
+		commandRef.current = el
+		if (ref) {
+			if (typeof ref === 'function') {
+				ref(el)
+			} else {
+				ref.current = el
+			}
+		}
+	}
+
 	return (
 		<CommandPrimitive
-			ref={ref}
+			ref={setBothRefs}
 			className={cn(
-				'relative flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
+				'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
 				className,
 			)}
 			{...props}
 		/>
 	)
-}
+})
+
 Command.displayName = CommandPrimitive.displayName
 
 const CommandInput = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive.Input>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, onClick, onValueChange, ...props }, ref) => {
-	const { openList } = useCommandContext()
+	const { openList, inputRef } = useCommandContext()
 	onValueChange = callAll(onValueChange, openList)
 	onClick = callAll(onClick, openList)
+	const setBothRefs = (el: HTMLInputElement | null) => {
+		// @ts-expect-error - this is fine
+		inputRef.current = el
+		if (ref) {
+			if (typeof ref === 'function') {
+				ref(el)
+			} else {
+				ref.current = el
+			}
+		}
+	}
 	return (
 		<div className="flex items-center border px-3" cmdk-input-wrapper="">
 			<p className="mr-2 h-5 w-4 shrink-0 opacity-50">🔎</p>
 			<CommandPrimitive.Input
-				ref={ref}
+				ref={setBothRefs}
 				className={cn(
 					'flex h-10 w-full rounded-md  bg-transparent py-3 text-sm outline-none placeholder:text-slate-500 disabled:cursor-not-allowed disabled:opacity-50',
 					className,
@@ -173,8 +189,11 @@ const CommandItem = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive.Item>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
 >(({ className, onSelect, ...props }, ref) => {
-	const { closeList } = useCommandContext()
-	onSelect = callAll(onSelect, closeList)
+	const { closeList, inputRef } = useCommandContext()
+	const focusInput = () => {
+		inputRef.current?.focus()
+	}
+	onSelect = callAll(onSelect, closeList, focusInput)
 
 	return (
 		<CommandPrimitive.Item
