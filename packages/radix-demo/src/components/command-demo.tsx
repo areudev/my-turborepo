@@ -7,7 +7,6 @@ import {
 	// CommandInput,
 	CommandItem,
 	CommandList,
-	CommandProvider,
 } from '../lib/my-command'
 
 export function CommandDemo() {
@@ -15,35 +14,34 @@ export function CommandDemo() {
 
 	return (
 		<div className="flex w-96 flex-col items-center justify-center gap-2">
-			<CommandProvider>
-				<Command>
-					<CommandInput
-						onClick={() => {
-							console.log('you clicked by i closed :(')
-						}}
-						value={value}
-						onValueChange={setValue}
-						placeholder="Type a command or search..."
-					/>
-					<CommandList>
-						<CommandEmpty>No results found.</CommandEmpty>
-						<CommandGroup heading="books">
-							{books.map(book => (
-								<CommandItem
-									value={`${book.title}`}
-									onSelect={current => {
-										console.log('selected', book.title)
-										setValue(book.title)
-									}}
-									key={book.id}
-								>
-									{book.title}
-								</CommandItem>
-							))}
-						</CommandGroup>
-					</CommandList>
-				</Command>
-			</CommandProvider>
+			<Command loop>
+				<CommandInput
+					onClick={() => {
+						console.log('you clicked by i closed :(')
+					}}
+					value={value}
+					onValueChange={setValue}
+					placeholder="Type a command or search..."
+				/>
+				<CommandList>
+					<CommandEmpty>No results found.</CommandEmpty>
+					<CommandGroup heading="books">
+						{books.map(book => (
+							<CommandItem
+								value={`${book.title}`}
+								onSelect={current => {
+									console.log('selected', book.title)
+									setValue(book.title)
+								}}
+								key={book.id}
+							>
+								{book.title}
+							</CommandItem>
+						))}
+					</CommandGroup>
+				</CommandList>
+			</Command>
+
 			<div>
 				<p>Selected: {value}</p>
 			</div>

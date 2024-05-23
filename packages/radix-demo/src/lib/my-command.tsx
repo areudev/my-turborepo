@@ -15,24 +15,24 @@ const CommandContext = React.createContext<CommandContextValue | undefined>(
 	undefined,
 )
 
-type CommandProviderProps = {
-	children: React.ReactNode
-}
+// type CommandProviderProps = {
+// 	children: React.ReactNode
+// }
 
-function CommandProvider({ children }: CommandProviderProps) {
-	const [open, setOpen] = React.useState(false)
-	const openList = React.useCallback(() => setOpen(true), [])
-	const closeList = React.useCallback(() => setOpen(false), [])
-	const toggleList = React.useCallback(() => setOpen(open => !open), [])
-	const inputRef = React.useRef<HTMLInputElement>(null)
-	return (
-		<CommandContext.Provider
-			value={{ open, openList, closeList, toggleList, inputRef }}
-		>
-			{children}
-		</CommandContext.Provider>
-	)
-}
+// function CommandProvider({ children }: CommandProviderProps) {
+// 	const [open, setOpen] = React.useState(false)
+// 	const openList = React.useCallback(() => setOpen(true), [])
+// 	const closeList = React.useCallback(() => setOpen(false), [])
+// 	const toggleList = React.useCallback(() => setOpen(open => !open), [])
+// 	const inputRef = React.useRef<HTMLInputElement>(null)
+// 	return (
+// 		<CommandContext.Provider
+// 			value={{ open, openList, closeList, toggleList, inputRef }}
+// 		>
+// 			{children}
+// 		</CommandContext.Provider>
+// 	)
+// }
 
 const useCommandContext = () => {
 	const value = React.useContext(CommandContext)
@@ -45,7 +45,11 @@ const Command = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive>
 >(({ className, ...props }, ref) => {
-	const { open, closeList } = useCommandContext()
+	const [open, setOpen] = React.useState(false)
+	const openList = React.useCallback(() => setOpen(true), [])
+	const closeList = React.useCallback(() => setOpen(false), [])
+	const toggleList = React.useCallback(() => setOpen(open => !open), [])
+	const inputRef = React.useRef<HTMLInputElement>(null)
 	const commandRef = React.useRef<HTMLDivElement | null>(null)
 
 	const handleClick = (e: MouseEvent | TouchEvent) => {
@@ -71,14 +75,18 @@ const Command = React.forwardRef<
 	}
 
 	return (
-		<CommandPrimitive
-			ref={setBothRefs}
-			className={cn(
-				'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
-				className,
-			)}
-			{...props}
-		/>
+		<CommandContext.Provider
+			value={{ open, openList, closeList, toggleList, inputRef }}
+		>
+			<CommandPrimitive
+				ref={setBothRefs}
+				className={cn(
+					'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
+					className,
+				)}
+				{...props}
+			/>
+		</CommandContext.Provider>
 	)
 })
 
@@ -228,7 +236,6 @@ CommandShortcut.displayName = 'CommandShortcut'
 
 export {
 	Command,
-	CommandProvider,
 	CommandInput,
 	CommandList,
 	CommandEmpty,
