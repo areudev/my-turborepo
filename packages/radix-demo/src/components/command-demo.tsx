@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
 	Command,
 	CommandDialog,
@@ -9,10 +9,15 @@ import {
 	CommandList,
 	CommandListDialoged,
 } from '../lib/command-dialoged'
+import { useClickAway } from '../hooks/click-outside'
 
 export function CommandDemo() {
 	const [open, setOpen] = useState(false)
-
+	const ref = useClickAway(() => {
+		if (open) {
+			setOpen(false)
+		}
+	})
 	return (
 		<div className="flex items-center justify-center">
 			<Command>
@@ -23,7 +28,7 @@ export function CommandDemo() {
 					placeholder="Type a command or search..."
 				/>
 				{open ? (
-					<CommandList>
+					<CommandList ref={ref}>
 						<CommandEmpty>No results found.</CommandEmpty>
 						<CommandGroup heading="Suggestions">
 							<CommandItem>Calendar</CommandItem>
