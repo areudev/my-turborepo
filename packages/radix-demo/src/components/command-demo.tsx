@@ -1,20 +1,20 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import {
 	Command,
 	CommandEmpty,
 	CommandGroup,
 	CommandInput,
-	// CommandInput,
 	CommandItem,
 	CommandList,
-} from '../lib/my-command'
+} from '../lib/commando'
 
 export function CommandDemo() {
+	const [open, setOpen] = useState(false)
 	const [value, setValue] = useState('')
 
 	return (
 		<div className="flex w-96 flex-col items-center justify-center gap-2">
-			<Command loop>
+			<Command loop open={open} setOpen={setOpen}>
 				<CommandInput
 					onClick={() => {
 						console.log('you clicked by i closed :(')

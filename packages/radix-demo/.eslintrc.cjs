@@ -17,6 +17,8 @@ module.exports = {
 				'no-console': 'off',
 				'@typescript-eslint/array-type': 'off',
 				'no-param-reassign': 'off',
+				'@typescript-eslint/consistent-type-definitions': 'off',
+				eqeqeq: 'off',
 			},
 		},
 	],
