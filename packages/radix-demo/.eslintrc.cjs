@@ -15,6 +15,7 @@ module.exports = {
 				'react/button-has-type': 'off',
 				'@typescript-eslint/no-shadow': 'off',
 				'no-console': 'off',
+				'@typescript-eslint/array-type': 'off',
 			},
 		},
 	],
