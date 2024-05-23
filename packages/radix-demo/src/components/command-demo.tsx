@@ -1,18 +1,17 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import {
 	Command,
-	// CommandDialog,
 	CommandEmpty,
 	CommandGroup,
 	CommandInput,
 	CommandItem,
 	CommandList,
-	// CommandListDialoged,
-} from '../lib/command-dialoged'
+} from '../lib/my-command'
 import { useEventListener } from '../hooks/event'
 
 export function CommandDemo() {
 	const [open, setOpen] = useState(false)
+	const [value, setValue] = useState('')
 	const ref = useRef<HTMLDivElement | null>(null)
 
 	const handleClick = (e: MouseEvent | TouchEvent) => {
@@ -32,6 +31,8 @@ export function CommandDemo() {
 					onClick={() => {
 						if (!open) setOpen(open => !open)
 					}}
+					value={value}
+					onValueChange={setValue}
 					placeholder="Type a command or search..."
 				/>
 				{open ? (
@@ -39,7 +40,17 @@ export function CommandDemo() {
 						<CommandEmpty>No results found.</CommandEmpty>
 						<CommandGroup heading="books">
 							{books.map(book => (
-								<CommandItem key={book.id}>{book.title}</CommandItem>
+								<CommandItem
+									value={book.title}
+									onSelect={() => {
+										console.log('selected', book.title)
+										// setOpen(false)
+										setValue(book.title)
+									}}
+									key={book.id}
+								>
+									{book.title}
+								</CommandItem>
 							))}
 						</CommandGroup>
 					</CommandList>

@@ -14,6 +14,7 @@ module.exports = {
 				'@typescript-eslint/no-empty-interface': 'off',
 				'react/button-has-type': 'off',
 				'@typescript-eslint/no-shadow': 'off',
+				'no-console': 'off',
 			},
 		},
 	],
