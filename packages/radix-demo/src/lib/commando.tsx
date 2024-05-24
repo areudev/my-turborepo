@@ -3,6 +3,7 @@ import { Command as CommandPrimitive } from 'cmdk'
 import { cn } from '../utils/misc'
 import { useEventListener } from '../hooks/event'
 import { callAll } from '../utils/call-all'
+import { mergeRefs } from '../utils/merge-refs'
 
 type CommandContextValue = {
 	open: boolean
@@ -90,23 +91,12 @@ const Command = React.forwardRef<
 			}
 		})
 
-		const setBothRefs = (el: HTMLDivElement | null) => {
-			commandRef.current = el
-			if (ref) {
-				if (typeof ref === 'function') {
-					ref(el)
-				} else {
-					ref.current = el
-				}
-			}
-		}
-
 		return (
 			<CommandContext.Provider
 				value={{ open, openList, closeList, toggleList, inputRef }}
 			>
 				<CommandPrimitive
-					ref={setBothRefs}
+					ref={mergeRefs([inputRef, ref])}
 					className={cn(
 						'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
 						className,
@@ -132,22 +122,21 @@ const CommandInput = React.forwardRef<
 	}
 	onValueChange = callAll(onValueChange, openListIfClosed)
 	onClick = callAll(onClick, openListIfClosed)
-	const setBothRefs = (el: HTMLInputElement | null) => {
-		// @ts-expect-error - this is fine
-		inputRef.current = el
-		if (ref) {
-			if (typeof ref === 'function') {
-				ref(el)
-			} else {
-				ref.current = el
-			}
-		}
-	}
+	// const setBothRefs = (el: HTMLInputElement | null) => {
+	// 	inputRef.current = el
+	// 	if (ref) {
+	// 		if (typeof ref === 'function') {
+	// 			ref(el)
+	// 		} else {
+	// 			ref.current = el
+	// 		}
+	// 	}
+	// }
 	return (
 		<div className="flex items-center border px-3" cmdk-input-wrapper="">
 			<p className="mr-2 h-5 w-4 shrink-0 opacity-50">🔎</p>
 			<CommandPrimitive.Input
-				ref={setBothRefs}
+				ref={mergeRefs([inputRef, ref])}
 				className={cn(
 					'flex h-10 w-full rounded-md  bg-transparent py-3 text-sm outline-none placeholder:text-slate-500 disabled:cursor-not-allowed disabled:opacity-50',
 					className,
