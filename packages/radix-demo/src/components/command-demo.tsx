@@ -14,11 +14,15 @@ export function CommandDemo() {
 
 	return (
 		<div className="flex w-96 flex-col items-center justify-center gap-2">
-			<Command loop open={open} setOpen={setOpen}>
+			<Command
+				loop
+				// open={open}
+				// onOpenChange={o => {
+				// 	console.log('open', o)
+				// 	setOpen(o)
+				// }}
+			>
 				<CommandInput
-					onClick={() => {
-						console.log('you clicked by i closed :(')
-					}}
 					value={value}
 					onValueChange={setValue}
 					placeholder="Type a command or search..."

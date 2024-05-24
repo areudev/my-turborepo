@@ -22,79 +22,98 @@ const useCommandContext = () => {
 	}
 	return value
 }
+type ReducerState = {
+	open: boolean
+}
+type ReducerAction = { type: 'open' } | { type: 'close' } | { type: 'toggle' }
+function reducer(state: ReducerState, action: ReducerAction): ReducerState {
+	switch (action.type) {
+		case 'open':
+			return { open: true }
+		case 'close':
+			return { open: false }
+		case 'toggle':
+			return { open: !state.open }
+		default:
+			return state
+	}
+}
 const Command = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive> & {
 		open?: boolean
-		setOpen?: (open: boolean) => void
+		onOpenChange?: (open: boolean) => void
 	}
->(
-	(
-		{ className, open: controlledOpen, setOpen: setControlledOpen, ...props },
-		ref,
-	) => {
-		const [unControlledOpen, setUncontrolledOpen] = React.useState(false)
+>(({ className, open: controlledOpen, onOpenChange, ...props }, ref) => {
+	const [state, dispatch] = React.useReducer(reducer, { open: false })
 
-		const openIsControlled = controlledOpen != null
+	const openIsControlled = controlledOpen != null
+	const open = openIsControlled ? controlledOpen : state.open
 
-		const open = openIsControlled ? controlledOpen : unControlledOpen
+	// if (openIsControlled && onOpenChange === undefined) {
+	// 	throw new Error(
+	// 		'You provided an `open` prop without providing an `setOpen` prop. You must provide both.',
+	// 	)
+	// }
 
-		if (openIsControlled && setControlledOpen === undefined) {
-			throw new Error(
-				'You provided an `open` prop without providing an `setOpen` prop. You must provide both.',
-			)
+	function dispatchWithOnChange(action: ReducerAction) {
+		if (!openIsControlled) {
+			dispatch(action)
 		}
+		if (onOpenChange) {
+			onOpenChange(reducer(state, action).open)
+		}
+	}
 
-		const setOpen = openIsControlled ? setControlledOpen : setUncontrolledOpen
+	const openList = () => dispatchWithOnChange({ type: 'open' })
+	const closeList = () => dispatchWithOnChange({ type: 'close' })
+	const toggleList = () => dispatchWithOnChange({ type: 'toggle' })
 
-		const openList = React.useCallback(() => setOpen(true), [setOpen])
-		const closeList = React.useCallback(() => setOpen(false), [setOpen])
-		const toggleList = React.useCallback(
-			// @ts-expect-error - wtf is this any
-			() => setOpen(prevOpen => !prevOpen),
-			[setOpen],
-		)
-		const inputRef = React.useRef<HTMLInputElement>(null)
-		const commandRef = React.useRef<HTMLDivElement | null>(null)
+	const inputRef = React.useRef<HTMLInputElement>(null)
+	const commandRef = React.useRef<HTMLDivElement | null>(null)
 
-		const handleClick = (e: MouseEvent | TouchEvent) => {
-			const element = commandRef.current
-			if (!element || element.contains(e.target as Node)) return
-			if (open) {
-				closeList()
+	const handleClick = (e: MouseEvent | TouchEvent) => {
+		const element = commandRef.current
+		if (!element || element.contains(e.target as Node)) return
+		if (open) {
+			closeList()
+		}
+	}
+
+	useEventListener('mousedown', handleClick)
+	useEventListener('touchstart', handleClick)
+	useEventListener('keydown', e => {
+		if (e.key === 'Escape') {
+			closeList()
+		}
+	})
+
+	const setBothRefs = (el: HTMLDivElement | null) => {
+		commandRef.current = el
+		if (ref) {
+			if (typeof ref === 'function') {
+				ref(el)
+			} else {
+				ref.current = el
 			}
 		}
+	}
 
-		useEventListener('mousedown', handleClick)
-		useEventListener('touchstart', handleClick)
-
-		const setBothRefs = (el: HTMLDivElement | null) => {
-			commandRef.current = el
-			if (ref) {
-				if (typeof ref === 'function') {
-					ref(el)
-				} else {
-					ref.current = el
-				}
-			}
-		}
-
-		return (
-			<CommandContext.Provider
-				value={{ open, openList, closeList, toggleList, inputRef }}
-			>
-				<CommandPrimitive
-					ref={setBothRefs}
-					className={cn(
-						'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
-						className,
-					)}
-					{...props}
-				/>
-			</CommandContext.Provider>
-		)
-	},
-)
+	return (
+		<CommandContext.Provider
+			value={{ open, openList, closeList, toggleList, inputRef }}
+		>
+			<CommandPrimitive
+				ref={setBothRefs}
+				className={cn(
+					'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
+					className,
+				)}
+				{...props}
+			/>
+		</CommandContext.Provider>
+	)
+})
 
 Command.displayName = CommandPrimitive.displayName
 
@@ -102,9 +121,14 @@ const CommandInput = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive.Input>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, onClick, onValueChange, ...props }, ref) => {
-	const { openList, inputRef } = useCommandContext()
-	onValueChange = callAll(onValueChange, openList)
-	onClick = callAll(onClick, openList)
+	const { openList, inputRef, open } = useCommandContext()
+	const openListIfClosed = () => {
+		if (!open) {
+			openList()
+		}
+	}
+	onValueChange = callAll(onValueChange, openListIfClosed)
+	onClick = callAll(onClick, openListIfClosed)
 	const setBothRefs = (el: HTMLInputElement | null) => {
 		// @ts-expect-error - this is fine
 		inputRef.current = el

@@ -19,6 +19,7 @@ module.exports = {
 				'no-param-reassign': 'off',
 				'@typescript-eslint/consistent-type-definitions': 'off',
 				eqeqeq: 'off',
+				'@typescript-eslint/sort-type-constituents': 'off',
 			},
 		},
 	],
