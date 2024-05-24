@@ -20,6 +20,7 @@ module.exports = {
 				'@typescript-eslint/consistent-type-definitions': 'off',
 				eqeqeq: 'off',
 				'@typescript-eslint/sort-type-constituents': 'off',
+				'react/jsx-boolean-value': 'off',
 			},
 		},
 	],

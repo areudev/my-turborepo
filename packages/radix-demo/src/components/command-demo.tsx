@@ -15,12 +15,13 @@ export function CommandDemo() {
 	return (
 		<div className="flex w-96 flex-col items-center justify-center gap-2">
 			<Command
+				initialOpen={true}
 				loop
-				// open={open}
-				// onOpenChange={o => {
-				// 	console.log('open', o)
-				// 	setOpen(o)
-				// }}
+				open={open}
+				onOpenChange={o => {
+					console.log('open', o)
+					setOpen(o)
+				}}
 			>
 				<CommandInput
 					value={value}

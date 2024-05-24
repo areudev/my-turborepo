@@ -43,77 +43,80 @@ const Command = React.forwardRef<
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive> & {
 		open?: boolean
 		onOpenChange?: (open: boolean) => void
+		initialOpen?: boolean
 	}
->(({ className, open: controlledOpen, onOpenChange, ...props }, ref) => {
-	const [state, dispatch] = React.useReducer(reducer, { open: false })
+>(
+	(
+		{ className, open: controlledOpen, onOpenChange, initialOpen, ...props },
+		ref,
+	) => {
+		initialOpen = React.useRef(initialOpen).current
+		const [state, dispatch] = React.useReducer(reducer, {
+			open: initialOpen ?? false,
+		})
 
-	const openIsControlled = controlledOpen != null
-	const open = openIsControlled ? controlledOpen : state.open
+		const openIsControlled = controlledOpen != null
+		const open = openIsControlled ? controlledOpen : state.open
 
-	// if (openIsControlled && onOpenChange === undefined) {
-	// 	throw new Error(
-	// 		'You provided an `open` prop without providing an `setOpen` prop. You must provide both.',
-	// 	)
-	// }
-
-	function dispatchWithOnChange(action: ReducerAction) {
-		if (!openIsControlled) {
-			dispatch(action)
-		}
-		if (onOpenChange) {
-			onOpenChange(reducer(state, action).open)
-		}
-	}
-
-	const openList = () => dispatchWithOnChange({ type: 'open' })
-	const closeList = () => dispatchWithOnChange({ type: 'close' })
-	const toggleList = () => dispatchWithOnChange({ type: 'toggle' })
-
-	const inputRef = React.useRef<HTMLInputElement>(null)
-	const commandRef = React.useRef<HTMLDivElement | null>(null)
-
-	const handleClick = (e: MouseEvent | TouchEvent) => {
-		const element = commandRef.current
-		if (!element || element.contains(e.target as Node)) return
-		if (open) {
-			closeList()
-		}
-	}
-
-	useEventListener('mousedown', handleClick)
-	useEventListener('touchstart', handleClick)
-	useEventListener('keydown', e => {
-		if (e.key === 'Escape') {
-			closeList()
-		}
-	})
-
-	const setBothRefs = (el: HTMLDivElement | null) => {
-		commandRef.current = el
-		if (ref) {
-			if (typeof ref === 'function') {
-				ref(el)
-			} else {
-				ref.current = el
+		function dispatchWithOnChange(action: ReducerAction) {
+			if (!openIsControlled) {
+				dispatch(action)
+			}
+			if (onOpenChange) {
+				onOpenChange(reducer(state, action).open)
 			}
 		}
-	}
 
-	return (
-		<CommandContext.Provider
-			value={{ open, openList, closeList, toggleList, inputRef }}
-		>
-			<CommandPrimitive
-				ref={setBothRefs}
-				className={cn(
-					'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
-					className,
-				)}
-				{...props}
-			/>
-		</CommandContext.Provider>
-	)
-})
+		const openList = () => dispatchWithOnChange({ type: 'open' })
+		const closeList = () => dispatchWithOnChange({ type: 'close' })
+		const toggleList = () => dispatchWithOnChange({ type: 'toggle' })
+
+		const inputRef = React.useRef<HTMLInputElement>(null)
+		const commandRef = React.useRef<HTMLDivElement | null>(null)
+
+		const handleClick = (e: MouseEvent | TouchEvent) => {
+			const element = commandRef.current
+			if (!element || element.contains(e.target as Node)) return
+			if (open) {
+				closeList()
+			}
+		}
+
+		useEventListener('mousedown', handleClick)
+		useEventListener('touchstart', handleClick)
+		useEventListener('keydown', e => {
+			if (e.key === 'Escape') {
+				closeList()
+			}
+		})
+
+		const setBothRefs = (el: HTMLDivElement | null) => {
+			commandRef.current = el
+			if (ref) {
+				if (typeof ref === 'function') {
+					ref(el)
+				} else {
+					ref.current = el
+				}
+			}
+		}
+
+		return (
+			<CommandContext.Provider
+				value={{ open, openList, closeList, toggleList, inputRef }}
+			>
+				<CommandPrimitive
+					ref={setBothRefs}
+					className={cn(
+						'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
+						className,
+					)}
+					{...props}
+				/>
+			</CommandContext.Provider>
+		)
+	},
+)
 
 Command.displayName = CommandPrimitive.displayName
 
