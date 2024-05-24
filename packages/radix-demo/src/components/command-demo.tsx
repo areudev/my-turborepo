@@ -9,7 +9,7 @@ import {
 } from '../lib/commando'
 
 export function CommandDemo() {
-	const [open, setOpen] = useState(false)
+	// const [open, setOpen] = useState(false)
 	const [value, setValue] = useState('')
 	const inputRef = useRef<HTMLInputElement>(null)
 	const divRef = useRef<HTMLDivElement>(null)
@@ -34,11 +34,11 @@ export function CommandDemo() {
 			<Command
 				initialOpen={true}
 				loop
-				open={open}
-				onOpenChange={o => {
-					console.log('open', o)
-					setOpen(o)
-				}}
+				// open={open}
+				// onOpenChange={o => {
+				// 	console.log('open', o)
+				// 	setOpen(o)
+				// }}
 				ref={divRef}
 			>
 				<CommandInput

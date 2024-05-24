@@ -96,7 +96,7 @@ const Command = React.forwardRef<
 				value={{ open, openList, closeList, toggleList, inputRef }}
 			>
 				<CommandPrimitive
-					ref={mergeRefs([inputRef, ref])}
+					ref={mergeRefs([commandRef, ref])}
 					className={cn(
 						'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
 						className,
