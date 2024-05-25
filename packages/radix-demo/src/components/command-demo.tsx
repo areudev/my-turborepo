@@ -46,8 +46,8 @@ export function CommandDemo() {
 				<CommandInput
 					name="command-input"
 					ref={inputRef}
-					// value={value}
-					// onValueChange={setValue}
+					value={value}
+					onValueChange={setValue}
 					placeholder="Type a command or search..."
 				/>
 				<CommandList>
@@ -56,10 +56,13 @@ export function CommandDemo() {
 						{books.map(book => (
 							<CommandItem
 								value={`${book.title}`}
-								onSelect={() => {
-									console.log('selected', book.title)
-									setValue(book.title)
+								onSelect={value => {
+									setValue(value)
 								}}
+								// onSelect={() => {
+								// 	console.log('selected', book.title)
+								// 	// setValue(book.title)
+								// }}
 								key={book.id}
 							>
 								{book.title}

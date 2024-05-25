@@ -198,13 +198,10 @@ const CommandInput = React.forwardRef<
 			? controlledValue
 			: valueState.value
 
-		console.log('value', value)
-
 		onClick = callAll(onClick, openListIfClosed)
 		const onMyValueChange = (value: string) => {
 			if (!isValueControlledRef.current) {
 				setValue(value)
-				return
 			}
 			onValueChange?.(value)
 		}
@@ -220,11 +217,7 @@ const CommandInput = React.forwardRef<
 					)}
 					{...props}
 					onClick={onClick}
-					onValueChange={callAll(
-						onMyValueChange,
-						openListIfClosed,
-						console.log,
-					)}
+					onValueChange={callAll(onMyValueChange, openListIfClosed)}
 					value={value}
 				/>
 			</div>
@@ -302,12 +295,19 @@ const CommandItem = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive.Item>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
 >(({ className, onSelect, ...props }, ref) => {
-	const { closeList, inputRef, setValue } = useCommandContext()
+	const { closeList, inputRef, setValue, isValueControlledRef } =
+		useCommandContext()
 	const focusInput = () => {
 		inputRef.current?.focus()
 	}
 
-	onSelect = callAll(onSelect, setValue, closeList, focusInput)
+	function handleSelect(value: string) {
+		if (!isValueControlledRef.current) {
+			setValue(value)
+		}
+
+		onSelect?.(value)
+	}
 
 	return (
 		<CommandPrimitive.Item
@@ -316,8 +316,8 @@ const CommandItem = React.forwardRef<
 				'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-blue-200 aria-selected:text-blue-800 data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',
 				className,
 			)}
+			onSelect={callAll(handleSelect, closeList, focusInput)}
 			{...props}
-			onSelect={onSelect}
 		/>
 	)
 })
