@@ -7,7 +7,7 @@ import {
 	CommandItem,
 	CommandList,
 	openReducer,
-} from '../lib/commando'
+} from '../lib/commander'
 
 // const reducer: typeof openReducer = (state, action) => {
 // 	switch (action.type) {
@@ -24,9 +24,8 @@ import {
 // }
 
 export function CommandDemo() {
-	const [timesClicked, setTimesClicked] = useState(0)
 	const [open, setOpen] = useState(false)
-	const [value, setValue] = useState('')
+	// const [value, setValue] = useState('')
 	const inputRef = useRef<HTMLInputElement>(null)
 	const divRef = useRef<HTMLDivElement>(null)
 
@@ -35,15 +34,6 @@ export function CommandDemo() {
 			<Command
 				// initialOpen={true}
 				loop
-				onClick={() => {
-					setTimesClicked(prev => prev + 1)
-				}}
-				reducer={(state, action) => {
-					if (action.type === 'open' && timesClicked >= 4) {
-						return { open: false }
-					}
-					return openReducer(state, action)
-				}}
 				// open={open}
 				// onOpenChange={(o, action) => {
 				// 	// if (action.type === 'open' && timesClicked >= 4) {
@@ -56,8 +46,8 @@ export function CommandDemo() {
 				<CommandInput
 					name="command-input"
 					ref={inputRef}
-					value={value}
-					onValueChange={setValue}
+					// value={value}
+					// onValueChange={setValue}
 					placeholder="Type a command or search..."
 				/>
 				<CommandList>
@@ -68,7 +58,7 @@ export function CommandDemo() {
 								value={`${book.title}`}
 								onSelect={() => {
 									console.log('selected', book.title)
-									setValue(book.title)
+									// setValue(book.title)
 								}}
 								key={book.id}
 							>
@@ -78,11 +68,6 @@ export function CommandDemo() {
 					</CommandGroup>
 				</CommandList>
 			</Command>
-
-			<div>
-				<p>Selected: {value} </p>
-				<p>Times Clicked: {timesClicked}</p>
-			</div>
 		</div>
 	)
 }
