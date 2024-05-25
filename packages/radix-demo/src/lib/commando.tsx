@@ -23,11 +23,18 @@ const useCommandContext = () => {
 	}
 	return value
 }
-type ReducerState = {
+type OpenReducerState = {
 	open: boolean
 }
-type ReducerAction = { type: 'open' } | { type: 'close' } | { type: 'toggle' }
-function reducer(state: ReducerState, action: ReducerAction): ReducerState {
+type OpenReducerAction =
+	| { type: 'open' }
+	| { type: 'close' }
+	| { type: 'toggle' }
+
+export function openReducer(
+	state: OpenReducerState,
+	action: OpenReducerAction,
+): OpenReducerState {
 	switch (action.type) {
 		case 'open':
 			return { open: true }
@@ -45,12 +52,24 @@ const Command = React.forwardRef<
 		open?: boolean
 		onOpenChange?: (open: boolean) => void
 		initialOpen?: boolean
+		reducer?: (
+			state: OpenReducerState,
+			action: OpenReducerAction,
+		) => OpenReducerState
 	}
 >(
 	(
-		{ className, open: controlledOpen, onOpenChange, initialOpen, ...props },
+		{
+			className,
+			open: controlledOpen,
+			onOpenChange,
+			initialOpen,
+			reducer,
+			...props
+		},
 		ref,
 	) => {
+		reducer = reducer ?? openReducer
 		initialOpen = React.useRef(initialOpen).current
 		const [state, dispatch] = React.useReducer(reducer, {
 			open: initialOpen ?? false,
@@ -59,12 +78,12 @@ const Command = React.forwardRef<
 		const openIsControlled = controlledOpen != null
 		const open = openIsControlled ? controlledOpen : state.open
 
-		function dispatchWithOnChange(action: ReducerAction) {
+		function dispatchWithOnChange(action: OpenReducerAction) {
 			if (!openIsControlled) {
 				dispatch(action)
 			}
 			if (onOpenChange) {
-				onOpenChange(reducer(state, action).open)
+				onOpenChange(openReducer(state, action).open)
 			}
 		}
 

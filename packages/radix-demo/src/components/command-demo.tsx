@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import {
 	Command,
 	CommandEmpty,
@@ -6,34 +6,44 @@ import {
 	CommandInput,
 	CommandItem,
 	CommandList,
+	openReducer,
 } from '../lib/commando'
 
+// const reducer: typeof openReducer = (state, action) => {
+// 	switch (action.type) {
+// 		case 'open': {
+// 			return { open: true }
+// 		}
+// 		case 'close':
+// 			return { open: false }
+// 		case 'toggle':
+// 			return { open: !state.open }
+// 		default:
+// 			return state
+// 	}
+// }
+
 export function CommandDemo() {
+	const [timesClicked, setTimesClicked] = useState(0)
 	// const [open, setOpen] = useState(false)
 	const [value, setValue] = useState('')
 	const inputRef = useRef<HTMLInputElement>(null)
 	const divRef = useRef<HTMLDivElement>(null)
 
-	useEffect(() => {
-		if (!inputRef.current) return
-
-		inputRef.current.onmouseenter = () => {
-			console.log('input mouse enter')
-		}
-	}, [])
-	useEffect(() => {
-		if (!divRef.current) return
-
-		divRef.current.onmouseenter = () => {
-			console.log('command mouse enter')
-		}
-	}, [])
-
 	return (
 		<div className="flex w-96 flex-col items-center justify-center gap-2">
 			<Command
-				initialOpen={true}
+				// initialOpen={true}
 				loop
+				onClick={() => {
+					setTimesClicked(prev => prev + 1)
+				}}
+				reducer={(state, action) => {
+					if (action.type === 'open' && timesClicked >= 4) {
+						return { open: false }
+					}
+					return openReducer(state, action)
+				}}
 				// open={open}
 				// onOpenChange={o => {
 				// 	console.log('open', o)
@@ -42,6 +52,7 @@ export function CommandDemo() {
 				ref={divRef}
 			>
 				<CommandInput
+					name="command-input"
 					ref={inputRef}
 					value={value}
 					onValueChange={setValue}
@@ -67,7 +78,8 @@ export function CommandDemo() {
 			</Command>
 
 			<div>
-				<p>Selected: {value}</p>
+				<p>Selected: {value} </p>
+				<p>Times Clicked: {timesClicked}</p>
 			</div>
 		</div>
 	)
