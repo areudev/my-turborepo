@@ -14,6 +14,7 @@ type CommandContextValue = {
 	valueState: { value: string }
 	valueDispatch: React.Dispatch<ValueAction>
 	setValue: (value: string) => void
+	resetValue: () => void
 	isValueControlledRef: React.MutableRefObject<boolean>
 }
 const CommandContext = React.createContext<CommandContextValue | undefined>(
@@ -38,7 +39,7 @@ type OpenReducerAction =
 type ValueState = {
 	value: string
 }
-type ValueAction = { type: 'value'; value: string }
+type ValueAction = { type: 'value'; value: string } | { type: 'clear' }
 
 export function valueReducer(
 	state: ValueState,
@@ -47,6 +48,8 @@ export function valueReducer(
 	switch (action.type) {
 		case 'value':
 			return { value: action.value }
+		case 'clear':
+			return { value: '' }
 		default:
 			return state
 	}
@@ -95,12 +98,13 @@ const Command = React.forwardRef<
 			value: '',
 		})
 
-		// const setValue = (value: string) => valueDispatch({ type: 'value', value })
+		const setValue = (value: string) => valueDispatch({ type: 'value', value })
+		const resetValue = () => valueDispatch({ type: 'clear' })
 		initialOpen = React.useRef(initialOpen).current
 		const [openState, openDispatch] = React.useReducer(reducer, {
 			open: initialOpen,
 		})
-		const setValue = (value: string) => valueDispatch({ type: 'value', value })
+		// const setValue = (value: string) => valueDispatch({ type: 'value', value })
 
 		const openIsControlled = controlledOpen != null
 		const open = openIsControlled ? controlledOpen : openState.open
@@ -146,6 +150,7 @@ const Command = React.forwardRef<
 					valueState,
 					valueDispatch,
 					setValue,
+					resetValue,
 					isValueControlledRef,
 				}}
 			>
@@ -178,8 +183,8 @@ const CommandInput = React.forwardRef<
 			inputRef,
 			open,
 			valueState,
-			setValue,
 			isValueControlledRef,
+			setValue,
 		} = useCommandContext()
 
 		const openListIfClosed = () => {
@@ -192,21 +197,18 @@ const CommandInput = React.forwardRef<
 		const value = isValueControlledRef.current
 			? controlledValue
 			: valueState.value
+
 		console.log('value', value)
-		onValueChange = callAll(setValue, openListIfClosed, console.log)
-		// onValueChange = callAll(onValueChange, openListIfClosed)
 
 		onClick = callAll(onClick, openListIfClosed)
-		// const setBothRefs = (el: HTMLInputElement | null) => {
-		// 	inputRef.current = el
-		// 	if (ref) {
-		// 		if (typeof ref === 'function') {
-		// 			ref(el)
-		// 		} else {
-		// 			ref.current = el
-		// 		}
-		// 	}
-		// }
+		const onMyValueChange = (value: string) => {
+			if (!isValueControlledRef.current) {
+				setValue(value)
+				return
+			}
+			onValueChange?.(value)
+		}
+
 		return (
 			<div className="flex items-center border px-3" cmdk-input-wrapper="">
 				<p className="mr-2 h-5 w-4 shrink-0 opacity-50">🔎</p>
@@ -218,7 +220,11 @@ const CommandInput = React.forwardRef<
 					)}
 					{...props}
 					onClick={onClick}
-					onValueChange={onValueChange}
+					onValueChange={callAll(
+						onMyValueChange,
+						openListIfClosed,
+						console.log,
+					)}
 					value={value}
 				/>
 			</div>

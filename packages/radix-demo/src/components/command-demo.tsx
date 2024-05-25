@@ -24,8 +24,8 @@ import {
 // }
 
 export function CommandDemo() {
-	const [open, setOpen] = useState(false)
-	// const [value, setValue] = useState('')
+	// const [open, setOpen] = useState(false)
+	const [value, setValue] = useState('')
 	const inputRef = useRef<HTMLInputElement>(null)
 	const divRef = useRef<HTMLDivElement>(null)
 
@@ -58,7 +58,7 @@ export function CommandDemo() {
 								value={`${book.title}`}
 								onSelect={() => {
 									console.log('selected', book.title)
-									// setValue(book.title)
+									setValue(book.title)
 								}}
 								key={book.id}
 							>
