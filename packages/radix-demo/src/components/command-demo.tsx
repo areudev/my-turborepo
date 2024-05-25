@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
 	Command,
 	CommandEmpty,
@@ -25,10 +25,12 @@ import {
 
 export function CommandDemo() {
 	// const [open, setOpen] = useState(false)
-	const [value, setValue] = useState('')
+	// const [value, setValue] = useState('')
 	const inputRef = useRef<HTMLInputElement>(null)
 	const divRef = useRef<HTMLDivElement>(null)
-
+	useEffect(() => {
+		console.log(inputRef.current?.value)
+	})
 	return (
 		<div className="flex w-96 flex-col items-center justify-center gap-2">
 			<Command
@@ -41,13 +43,14 @@ export function CommandDemo() {
 				// 	// }
 				// 	setOpen(o)
 				// }}
+
 				ref={divRef}
 			>
 				<CommandInput
 					name="command-input"
 					ref={inputRef}
-					value={value}
-					onValueChange={setValue}
+					// value={value}
+					// onValueChange={setValue}
 					placeholder="Type a command or search..."
 				/>
 				<CommandList>
@@ -56,16 +59,16 @@ export function CommandDemo() {
 						{books.map(book => (
 							<CommandItem
 								value={`${book.title}`}
-								onSelect={value => {
-									setValue(value)
-								}}
+								// onSelect={value => {
+								// 	setValue(book.title)
+								// }}
 								// onSelect={() => {
 								// 	console.log('selected', book.title)
 								// 	// setValue(book.title)
 								// }}
 								key={book.id}
 							>
-								{book.title}
+								<p>{book.title}</p>
 							</CommandItem>
 						))}
 					</CommandGroup>

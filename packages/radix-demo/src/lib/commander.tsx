@@ -11,10 +11,8 @@ type CommandContextValue = {
 	closeList: () => void
 	toggleList: () => void
 	inputRef: React.RefObject<HTMLInputElement>
-	valueState: { value: string }
-	valueDispatch: React.Dispatch<ValueAction>
+	value: string
 	setValue: (value: string) => void
-	resetValue: () => void
 	isValueControlledRef: React.MutableRefObject<boolean>
 }
 const CommandContext = React.createContext<CommandContextValue | undefined>(
@@ -94,17 +92,12 @@ const Command = React.forwardRef<
 		ref,
 	) => {
 		const isValueControlledRef = React.useRef(false)
-		const [valueState, valueDispatch] = React.useReducer(valueReducer, {
-			value: '',
-		})
+		const [value, setValue] = React.useState('')
 
-		const setValue = (value: string) => valueDispatch({ type: 'value', value })
-		const resetValue = () => valueDispatch({ type: 'clear' })
 		initialOpen = React.useRef(initialOpen).current
 		const [openState, openDispatch] = React.useReducer(reducer, {
 			open: initialOpen,
 		})
-		// const setValue = (value: string) => valueDispatch({ type: 'value', value })
 
 		const openIsControlled = controlledOpen != null
 		const open = openIsControlled ? controlledOpen : openState.open
@@ -147,10 +140,8 @@ const Command = React.forwardRef<
 					closeList,
 					toggleList,
 					inputRef,
-					valueState,
-					valueDispatch,
+					value,
 					setValue,
-					resetValue,
 					isValueControlledRef,
 				}}
 			>
@@ -160,7 +151,6 @@ const Command = React.forwardRef<
 						'flex h-full w-full flex-col gap-2 overflow-hidden rounded-md bg-white text-black',
 						className,
 					)}
-					// value={valueState.value}
 					{...props}
 				/>
 			</CommandContext.Provider>
@@ -182,7 +172,7 @@ const CommandInput = React.forwardRef<
 			openList,
 			inputRef,
 			open,
-			valueState,
+			value: valueState,
 			isValueControlledRef,
 			setValue,
 		} = useCommandContext()
@@ -194,16 +184,13 @@ const CommandInput = React.forwardRef<
 		}
 
 		isValueControlledRef.current = controlledValue != null
-		const value = isValueControlledRef.current
-			? controlledValue
-			: valueState.value
+		const value = isValueControlledRef.current ? controlledValue : valueState
 
 		onClick = callAll(onClick, openListIfClosed)
-		const onMyValueChange = (value: string) => {
+		const onValueChangeInternal = (value: string) => {
 			if (!isValueControlledRef.current) {
 				setValue(value)
 			}
-			onValueChange?.(value)
 		}
 
 		return (
@@ -217,7 +204,11 @@ const CommandInput = React.forwardRef<
 					)}
 					{...props}
 					onClick={onClick}
-					onValueChange={callAll(onMyValueChange, openListIfClosed)}
+					onValueChange={callAll(
+						onValueChangeInternal,
+						onValueChange,
+						openListIfClosed,
+					)}
 					value={value}
 				/>
 			</div>
@@ -301,12 +292,10 @@ const CommandItem = React.forwardRef<
 		inputRef.current?.focus()
 	}
 
-	function handleSelect(value: string) {
+	function handleSelectInternal(value: string) {
 		if (!isValueControlledRef.current) {
 			setValue(value)
 		}
-
-		onSelect?.(value)
 	}
 
 	return (
@@ -316,7 +305,15 @@ const CommandItem = React.forwardRef<
 				'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-blue-200 aria-selected:text-blue-800 data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',
 				className,
 			)}
-			onSelect={callAll(handleSelect, closeList, focusInput)}
+			onSelect={callAll(
+				handleSelectInternal,
+				onSelect,
+				closeList,
+				focusInput,
+				value => {
+					console.log('runned with value ', value)
+				},
+			)}
 			{...props}
 		/>
 	)
