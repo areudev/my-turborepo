@@ -50,7 +50,7 @@ const Command = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive> & {
 		open?: boolean
-		onOpenChange?: (open: boolean) => void
+		onOpenChange?: (open: boolean, action: OpenReducerAction) => void
 		initialOpen?: boolean
 		reducer?: (
 			state: OpenReducerState,
@@ -63,16 +63,15 @@ const Command = React.forwardRef<
 			className,
 			open: controlledOpen,
 			onOpenChange,
-			initialOpen,
-			reducer,
+			initialOpen = false,
+			reducer = openReducer,
 			...props
 		},
 		ref,
 	) => {
-		reducer = reducer ?? openReducer
 		initialOpen = React.useRef(initialOpen).current
 		const [state, dispatch] = React.useReducer(reducer, {
-			open: initialOpen ?? false,
+			open: initialOpen,
 		})
 
 		const openIsControlled = controlledOpen != null
@@ -82,9 +81,7 @@ const Command = React.forwardRef<
 			if (!openIsControlled) {
 				dispatch(action)
 			}
-			if (onOpenChange) {
-				onOpenChange(openReducer(state, action).open)
-			}
+			onOpenChange?.(reducer({ ...state, open }, action).open, action)
 		}
 
 		const openList = () => dispatchWithOnChange({ type: 'open' })

@@ -25,7 +25,7 @@ import {
 
 export function CommandDemo() {
 	const [timesClicked, setTimesClicked] = useState(0)
-	// const [open, setOpen] = useState(false)
+	const [open, setOpen] = useState(false)
 	const [value, setValue] = useState('')
 	const inputRef = useRef<HTMLInputElement>(null)
 	const divRef = useRef<HTMLDivElement>(null)
@@ -45,8 +45,10 @@ export function CommandDemo() {
 					return openReducer(state, action)
 				}}
 				// open={open}
-				// onOpenChange={o => {
-				// 	console.log('open', o)
+				// onOpenChange={(o, action) => {
+				// 	// if (action.type === 'open' && timesClicked >= 4) {
+				// 	// 	return setOpen(false)
+				// 	// }
 				// 	setOpen(o)
 				// }}
 				ref={divRef}
