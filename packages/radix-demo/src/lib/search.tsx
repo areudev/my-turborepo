@@ -34,6 +34,57 @@ type OpenReducerAction =
 	| { type: 'close' }
 	| { type: 'toggle' }
 
+type ValueState = {
+	value: string
+}
+type ValueAction = { type: 'value'; value: string } | { type: 'clear' }
+
+export function valueReducer(
+	state: ValueState,
+	action: ValueAction,
+): ValueState {
+	switch (action.type) {
+		case 'value':
+			return { value: action.value }
+		case 'clear':
+			return { value: '' }
+		default:
+			return state
+	}
+}
+
+type CommmandState = {
+	open: boolean
+	value: string
+}
+
+type CommmandAction =
+	| { type: 'open' }
+	| { type: 'close' }
+	| { type: 'toggle' }
+	| { type: 'value'; value: string }
+	| { type: 'clear' }
+
+export const commandReducer = (
+	state: CommmandState,
+	action: CommmandAction,
+): CommmandState => {
+	switch (action.type) {
+		case 'open':
+			return { ...state, open: true }
+		case 'close':
+			return { ...state, open: false }
+		case 'toggle':
+			return { ...state, open: !state.open }
+		case 'value':
+			return { ...state, value: action.value }
+		case 'clear':
+			return { ...state, value: '' }
+		default:
+			return state
+	}
+}
+
 export function openReducer(
 	state: OpenReducerState,
 	action: OpenReducerAction,
@@ -73,26 +124,27 @@ const Command = React.forwardRef<
 		ref,
 	) => {
 		const isValueControlledRef = React.useRef(false)
-		const [value, setValue] = React.useState('')
-
-		initialOpen = React.useRef(initialOpen).current
-		const [openState, openDispatch] = React.useReducer(reducer, {
+		const [state, dispatch] = React.useReducer(commandReducer, {
 			open: initialOpen,
+			value: '',
 		})
 
+		initialOpen = React.useRef(initialOpen).current
+
 		const openIsControlled = controlledOpen != null
-		const open = openIsControlled ? controlledOpen : openState.open
+		const open = openIsControlled ? controlledOpen : state.open
 
 		function dispatchWithOnChange(action: OpenReducerAction) {
 			if (!openIsControlled) {
-				openDispatch(action)
+				dispatch(action)
 			}
-			onOpenChange?.(reducer({ ...openState, open }, action).open, action)
+			onOpenChange?.(reducer({ ...state, open }, action).open, action)
 		}
 
 		const openList = () => dispatchWithOnChange({ type: 'open' })
 		const closeList = () => dispatchWithOnChange({ type: 'close' })
 		const toggleList = () => dispatchWithOnChange({ type: 'toggle' })
+		const setValue = (value: string) => dispatch({ type: 'value', value })
 
 		const inputRef = React.useRef<HTMLInputElement>(null)
 		const commandRef = React.useRef<HTMLDivElement | null>(null)
@@ -121,7 +173,7 @@ const Command = React.forwardRef<
 					closeList,
 					toggleList,
 					inputRef,
-					value,
+					value: state.value,
 					setValue,
 					isValueControlledRef,
 				}}
@@ -167,7 +219,6 @@ const CommandInput = React.forwardRef<
 		isValueControlledRef.current = controlledValue != null
 		const value = isValueControlledRef.current ? controlledValue : valueState
 
-		onClick = callAll(onClick, openListIfClosed)
 		const onValueChangeInternal = (value: string) => {
 			if (!isValueControlledRef.current) {
 				setValue(value)
@@ -184,7 +235,7 @@ const CommandInput = React.forwardRef<
 						className,
 					)}
 					{...props}
-					onClick={onClick}
+					onClick={callAll(onClick, openListIfClosed)}
 					onValueChange={callAll(
 						onValueChangeInternal,
 						onValueChange,
