@@ -6,27 +6,13 @@ import {
 	CommandInput,
 	CommandItem,
 	CommandList,
-	commandReducer,
+	// commandReducer,
 } from '../lib/search'
-
-// const reducer: typeof openReducer = (state, action) => {
-// 	switch (action.type) {
-// 		case 'open': {
-// 			return { open: true }
-// 		}
-// 		case 'close':
-// 			return { open: false }
-// 		case 'toggle':
-// 			return { open: !state.open }
-// 		default:
-// 			return state
-// 	}
-// }
 
 export function CommandDemo() {
 	// const [timesClicked, setTimesClicked] = useState(0)
-	// const [open, setOpen] = useState(false)
-	// const [value, setValue] = useState('')
+	const [open, setOpen] = useState(false)
+	const [value, setValue] = useState('')
 	const inputRef = useRef<HTMLInputElement>(null)
 	const divRef = useRef<HTMLDivElement>(null)
 	useEffect(() => {
@@ -35,12 +21,12 @@ export function CommandDemo() {
 	return (
 		<div className="flex w-96 flex-col items-center justify-center gap-2">
 			<Command
-				// initialOpen={true}
+				initialOpen={true}
 				loop
-				// open={open}
-				// onOpenChange={(o, action) => {
-				// 	setOpen(o)
-				// }}
+				open={open}
+				onOpenChange={o => {
+					setOpen(o)
+				}}
 				// onOpenChange={(o, action) => {
 				// 	if (action.type === 'open' && timesClicked >= 4) {
 				// 		return setOpen(false)
@@ -50,20 +36,26 @@ export function CommandDemo() {
 				// reducer={(state, action) => {
 				// 	if (action.type === 'close') {
 				// 		console.log('close')
-				// 		return { ...state, open: false }
+				// 		return { ...state, open: true }
 				// 	}
 				// 	if (action.type === 'value' && action.value === '1984') {
 				// 		return { ...state, value: '420' }
 				// 	}
 				// 	return commandReducer(state, action)
 				// }}
+				// value={value}
+				// onValueChange={value => {
+				// 	console.log('value', value)
+				// 	// alert(value)
+				// 	setValue(value)
+				// }}
 				ref={divRef}
 			>
 				<CommandInput
 					name="command-input"
 					ref={inputRef}
-					// value={value}
-					// onValueChange={setValue}
+					value={value}
+					onValueChange={setValue}
 					// onClick={() => {
 					// 	setTimesClicked(prev => prev + 1)
 					// }}
@@ -75,10 +67,11 @@ export function CommandDemo() {
 						{books.map(book => (
 							<CommandItem
 								value={`${book.title}`}
-								// onSelect={value => {
-								// 	setValue(book.title)
-								// 	// console.log('selected', value)
-								// }}
+								onSelect={() => {
+									setValue(book.title)
+									// setValue(value)
+									// console.log('selected', value)
+								}}
 								// onSelect={() => {
 								// 	console.log('selected', book.title)
 								// 	// setValue(book.title)

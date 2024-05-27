@@ -26,13 +26,6 @@ const useCommandContext = () => {
 	}
 	return value
 }
-// type OpenReducerState = {
-// 	open: boolean
-// }
-// type OpenReducerAction =
-// 	| { type: 'open' }
-// 	| { type: 'close' }
-// 	| { type: 'toggle' }
 
 type CommmandState = {
 	open: boolean
@@ -300,15 +293,7 @@ const CommandItem = React.forwardRef<
 				'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-blue-200 aria-selected:text-blue-800 data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',
 				className,
 			)}
-			onSelect={callAll(
-				handleSelectInternal,
-				onSelect,
-				closeList,
-				focusInput,
-				value => {
-					console.log('runned with value ', value)
-				},
-			)}
+			onSelect={callAll(handleSelectInternal, onSelect, closeList, focusInput)}
 			{...props}
 		/>
 	)
