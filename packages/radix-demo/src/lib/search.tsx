@@ -66,21 +66,6 @@ export const commandReducer = (
 	}
 }
 
-// export function openReducer(
-// 	state: OpenReducerState,
-// 	action: OpenReducerAction,
-// ): OpenReducerState {
-// 	switch (action.type) {
-// 		case 'open':
-// 			return { open: true }
-// 		case 'close':
-// 			return { open: false }
-// 		case 'toggle':
-// 			return { open: !state.open }
-// 		default:
-// 			return state
-// 	}
-// }
 const Command = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive> & {
@@ -102,7 +87,7 @@ const Command = React.forwardRef<
 		ref,
 	) => {
 		const isValueControlledRef = React.useRef(false)
-		const [state, dispatch] = React.useReducer(commandReducer, {
+		const [state, dispatch] = React.useReducer(reducer, {
 			open: initialOpen,
 			value: '',
 		})

@@ -6,6 +6,7 @@ import {
 	CommandInput,
 	CommandItem,
 	CommandList,
+	commandReducer,
 } from '../lib/search'
 
 // const reducer: typeof openReducer = (state, action) => {
@@ -38,10 +39,23 @@ export function CommandDemo() {
 				loop
 				// open={open}
 				// onOpenChange={(o, action) => {
+				// 	setOpen(o)
+				// }}
+				// onOpenChange={(o, action) => {
 				// 	if (action.type === 'open' && timesClicked >= 4) {
 				// 		return setOpen(false)
 				// 	}
 				// 	setOpen(o)
+				// }}
+				// reducer={(state, action) => {
+				// 	if (action.type === 'close') {
+				// 		console.log('close')
+				// 		return { ...state, open: false }
+				// 	}
+				// 	if (action.type === 'value' && action.value === '1984') {
+				// 		return { ...state, value: '420' }
+				// 	}
+				// 	return commandReducer(state, action)
 				// }}
 				ref={divRef}
 			>
@@ -60,9 +74,10 @@ export function CommandDemo() {
 					<CommandGroup heading="books">
 						{books.map(book => (
 							<CommandItem
-								value={`${book.title} yo`}
+								value={`${book.title}`}
 								// onSelect={value => {
 								// 	setValue(book.title)
+								// 	// console.log('selected', value)
 								// }}
 								// onSelect={() => {
 								// 	console.log('selected', book.title)
