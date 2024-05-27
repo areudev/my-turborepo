@@ -26,32 +26,13 @@ const useCommandContext = () => {
 	}
 	return value
 }
-type OpenReducerState = {
-	open: boolean
-}
-type OpenReducerAction =
-	| { type: 'open' }
-	| { type: 'close' }
-	| { type: 'toggle' }
-
-type ValueState = {
-	value: string
-}
-type ValueAction = { type: 'value'; value: string } | { type: 'clear' }
-
-export function valueReducer(
-	state: ValueState,
-	action: ValueAction,
-): ValueState {
-	switch (action.type) {
-		case 'value':
-			return { value: action.value }
-		case 'clear':
-			return { value: '' }
-		default:
-			return state
-	}
-}
+// type OpenReducerState = {
+// 	open: boolean
+// }
+// type OpenReducerAction =
+// 	| { type: 'open' }
+// 	| { type: 'close' }
+// 	| { type: 'toggle' }
 
 type CommmandState = {
 	open: boolean
@@ -85,31 +66,28 @@ export const commandReducer = (
 	}
 }
 
-export function openReducer(
-	state: OpenReducerState,
-	action: OpenReducerAction,
-): OpenReducerState {
-	switch (action.type) {
-		case 'open':
-			return { open: true }
-		case 'close':
-			return { open: false }
-		case 'toggle':
-			return { open: !state.open }
-		default:
-			return state
-	}
-}
+// export function openReducer(
+// 	state: OpenReducerState,
+// 	action: OpenReducerAction,
+// ): OpenReducerState {
+// 	switch (action.type) {
+// 		case 'open':
+// 			return { open: true }
+// 		case 'close':
+// 			return { open: false }
+// 		case 'toggle':
+// 			return { open: !state.open }
+// 		default:
+// 			return state
+// 	}
+// }
 const Command = React.forwardRef<
 	React.ElementRef<typeof CommandPrimitive>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive> & {
 		open?: boolean
-		onOpenChange?: (open: boolean, action: OpenReducerAction) => void
+		onOpenChange?: (open: boolean, action: CommmandAction) => void
 		initialOpen?: boolean
-		reducer?: (
-			state: OpenReducerState,
-			action: OpenReducerAction,
-		) => OpenReducerState
+		reducer?: (state: CommmandState, action: CommmandAction) => CommmandState
 	}
 >(
 	(
@@ -118,7 +96,7 @@ const Command = React.forwardRef<
 			open: controlledOpen,
 			onOpenChange,
 			initialOpen = false,
-			reducer = openReducer,
+			reducer = commandReducer,
 			...props
 		},
 		ref,
@@ -134,7 +112,7 @@ const Command = React.forwardRef<
 		const openIsControlled = controlledOpen != null
 		const open = openIsControlled ? controlledOpen : state.open
 
-		function dispatchWithOnChange(action: OpenReducerAction) {
+		function dispatchWithOnChange(action: CommmandAction) {
 			if (!openIsControlled) {
 				dispatch(action)
 			}

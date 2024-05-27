@@ -60,7 +60,7 @@ export function CommandDemo() {
 					<CommandGroup heading="books">
 						{books.map(book => (
 							<CommandItem
-								// value={`${book.title}`}
+								value={`${book.title} yo`}
 								// onSelect={value => {
 								// 	setValue(book.title)
 								// }}
@@ -71,6 +71,7 @@ export function CommandDemo() {
 								key={book.id}
 							>
 								<p>{book.title}</p>
+								{/* {book.title} */}
 							</CommandItem>
 						))}
 					</CommandGroup>
