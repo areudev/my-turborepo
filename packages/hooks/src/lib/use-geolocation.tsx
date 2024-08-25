@@ -35,8 +35,8 @@ export function useGeolocation(options: GeolocationOptions = {}) {
 
 	const optionsRef = React.useRef(options)
 
-	const onEvent = React.useCallback(
-		({ coords, timestamp }: GeolocationPosition) => {
+	React.useEffect(() => {
+		const onEvent = ({ coords, timestamp }: GeolocationPosition) => {
 			setState({
 				loading: false,
 				accuracy: coords.accuracy,
@@ -49,19 +49,15 @@ export function useGeolocation(options: GeolocationOptions = {}) {
 				timestamp: timestamp,
 				error: null,
 			})
-		},
-		[],
-	)
+		}
 
-	const onError = React.useCallback((error: GeolocationPositionError) => {
-		setState(s => ({
-			...s,
-			loading: false,
-			error: error,
-		}))
-	}, [])
-
-	React.useEffect(() => {
+		const onError = (error: GeolocationPositionError) => {
+			setState(s => ({
+				...s,
+				loading: false,
+				error: error,
+			}))
+		}
 		if (!navigator.geolocation) {
 			setState(prevState => ({
 				...prevState,
@@ -86,7 +82,7 @@ export function useGeolocation(options: GeolocationOptions = {}) {
 		return () => {
 			navigator.geolocation.clearWatch(watchId)
 		}
-	}, [onEvent, onError])
+	}, [])
 
 	return state
 }
