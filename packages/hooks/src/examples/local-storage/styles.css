@@ -8,20 +8,16 @@ section {
 
 canvas {
 	border: 1px solid #36454f;
-	background-color: #1f2937;
+	background-color: peru;
 	margin: auto;
 	cursor: crosshair;
 	width: 100%;
 	height: 100%;
 	aspect-ratio: 1;
-	max-width: 400px;
+	/* max-width: 400px; */
 	border-radius: 8px;
 }
 
 figcaption {
 	opacity: 0.5;
-}
-
-.link {
-	color: #f97316 !important;
 }

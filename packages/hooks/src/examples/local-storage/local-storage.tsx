@@ -85,9 +85,9 @@ function createDrawing(
 		}
 
 		ctx.strokeStyle = '#ffffff'
-		ctx.lineWidth = 5
-		ctx.lineCap = 'round'
-		ctx.lineJoin = 'round'
+		ctx.lineWidth = 10
+		ctx.lineCap = 'butt'
+		ctx.lineJoin = 'miter'
 
 		if (lastPoint) {
 			ctx.beginPath()

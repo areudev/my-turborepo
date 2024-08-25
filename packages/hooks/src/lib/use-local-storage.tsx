@@ -22,8 +22,11 @@ const getItem = (key: string): string | null => {
 }
 
 const subscribe = (callback: () => void): (() => void) => {
-	// Implementation needed
-	return () => {}
+	window.addEventListener('storage', callback)
+
+	return () => {
+		window.removeEventListener('storage', callback)
+	}
 }
 
 const getServerSnapshot = (): never => {
@@ -35,8 +38,7 @@ export function useLocalStorage<T extends StorageValue>(
 	initialValue: T,
 ): [T, (value: T) => void] {
 	const getSnapshot = (): string | null => {
-		// Implementation needed
-		return null
+		return getItem(key)
 	}
 
 	const store = React.useSyncExternalStore(
@@ -45,9 +47,33 @@ export function useLocalStorage<T extends StorageValue>(
 		getServerSnapshot,
 	)
 
-	const setState = (value: T): void => {
-		// Implementation needed
-	}
+	const setState = React.useCallback(
+		(v: T | ((prevState: T) => T)) => {
+			try {
+				const nextState =
+					typeof v === 'function'
+						? (v as (prevState: T) => T)(
+								store ? JSON.parse(store) : initialValue,
+							)
+						: v
+
+				if (nextState === undefined || nextState === null) {
+					removeItem(key)
+				} else {
+					setItem(key, nextState)
+				}
+			} catch (e) {
+				console.warn(e)
+			}
+		},
+		[key, store, initialValue],
+	)
+
+	React.useEffect(() => {
+		if (getItem(key) === null && typeof initialValue !== 'undefined') {
+			setItem(key, initialValue)
+		}
+	}, [key, initialValue])
 
 	return [store ? JSON.parse(store) : initialValue, setState]
 }
