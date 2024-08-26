@@ -44,25 +44,27 @@ export function useSessionStorage<T>(
 		getServerSnapshot,
 	)
 
-	const setState = (
-		value: T | ((prevState: T) => T) | undefined | null,
-	): void => {
-		let nextState: T | undefined | null
+	const setState = React.useCallback(
+		(value: T | ((prevState: T) => T) | undefined | null): void => {
+			let nextState: T | undefined | null
 
-		if (typeof value === 'function') {
-			nextState = (value as (prevState: T) => T)(
-				store ? JSON.parse(store) : initialValue,
-			)
-		} else {
-			nextState = value
-		}
+			if (typeof value === 'function') {
+				nextState = (value as (prevState: T) => T)(
+					store ? JSON.parse(store) : initialValue,
+				)
+			} else {
+				nextState = value
+			}
 
-		if (nextState == null || typeof nextState === 'undefined') {
-			removeItem(key)
-		} else {
-			setItem(key, nextState)
-		}
-	}
+			if (nextState == null || typeof nextState === 'undefined') {
+				removeItem(key)
+			} else {
+				setItem(key, nextState)
+			}
+		},
+		[store, initialValue, key],
+	)
+
 	React.useEffect(() => {
 		if (getItem(key) === null && typeof initialValue !== 'undefined') {
 			setItem(key, initialValue)
